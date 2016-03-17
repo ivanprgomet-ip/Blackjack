@@ -17,21 +17,25 @@ namespace ConsoleGui
             game.AddPlayer(new HumanPlayer("ivan"));
             game.AddPlayer(new AiPlayer("dalius"));
             game.AddPlayer(new AiPlayer("james"));
-            game.AddPlayer(new HumanPlayer("johan"));
 
             InitialMoney(100,250);
 
             while (!isNewGame)
             {
-                PrintBalances();
                 NewRound();
+                PrintBalances();
                 PrintBets();
 
+                Console.WriteLine("press any button to deal cards");
+                Console.ReadKey();
+                Console.Clear();
+
+                PrintBalances();
                 game.FirstDeal();
 
                 PrintHands();
-                TurnRotation();
-                PrintHands();//TODO remove 
+                PlayerTurn();
+                PrintHands();
 
                 PrintWinners();
                 Console.ReadKey();
@@ -76,12 +80,15 @@ namespace ConsoleGui
             foreach (IPlayer player in game.players)
             {
                 Console.WriteLine(game.PlaceBet(player));
-                System.Threading.Thread.Sleep(200);
             }
             Console.WriteLine(game.PlaceBet(game.dealer));
             Console.WriteLine("------------------------------");
         }
 
+        private void PrintHand(IPlayer player)
+        {
+            Console.Write($"{player.Name}: {game.GetHand(player)}");
+        }
         private void PrintHands()
         {
             //TODO create enum and later print special card combos in prints after playerhand
@@ -90,19 +97,18 @@ namespace ConsoleGui
             {
                 var playerBalance = GetBalance(player);
                 var playerHand = game.GetHand(player);
-                Console.Write($"({playerBalance}$) {player.Name}: {playerHand}");
+                Console.Write($"{player.Name}: {playerHand}");
                 Console.WriteLine();
-                System.Threading.Thread.Sleep(200);
             }
             Console.ForegroundColor = ConsoleColor.DarkMagenta;
             var dealerBalance = GetBalance(game.dealer);
             var dealerHand = game.GetHand(game.dealer);
-            Console.Write($"({dealerBalance}$) {game.dealer.Name}: {dealerHand}");
+            Console.Write($"{game.dealer.Name}: {dealerHand}");
             Console.WriteLine();
             Console.WriteLine("------------------------------");
             Console.ResetColor();
         }
-        private void TurnRotation()
+        private void PlayerTurn()
         {
             foreach(IPlayer player in game.players)
             {
@@ -123,10 +129,6 @@ namespace ConsoleGui
             Console.ResetColor();
         }
 
-        private string GetBet(IPlayer player)
-        {
-            return Bank.GetPlayerBet(player.Id).ToString();
-        }
         private string GetBalance(IPlayer player)
         {
             return Bank.GetPlayerMoney(player.Id).ToString();
