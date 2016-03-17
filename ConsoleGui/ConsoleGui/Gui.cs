@@ -34,7 +34,7 @@ namespace ConsoleGui
                 game.FirstDeal();
 
                 PrintHands();
-                PlayerTurn();
+                PlayerTurns();
                 PrintHands();
 
                 PrintWinners();
@@ -111,14 +111,15 @@ namespace ConsoleGui
         }
         ////////////////////////////////////////////////
 
-        private void PlayerTurn()
+        private void PlayerTurns()
         {
             foreach(IPlayer player in game.players)
             {
-                game.PlayerTurn(player);
+                game.PlayerTurn2(player);
             }
-            game.PlayerTurn(game.dealer);
+            game.PlayerTurn2(game.dealer);
         }
+
 
         private void PrintWinners()
         {

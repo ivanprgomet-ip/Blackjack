@@ -59,14 +59,18 @@ namespace ConsoleGui
             player.Hand.AddCardToHand(deck.ReturnCard());
         }
         ////////////////////////////////////////////////////////////////////
-        public void PlayerTurn(IPlayer player)
+        public PlayerDecision PlayerTurn(IPlayer player)
         {
-            // TODO put this in loop for as long as player hits?
-            PlayerDecision playerDecision = player.MakeDecision(player.Hand);
-            if (playerDecision == PlayerDecision.Hit)
+            return player.MakeDecision(player.Hand);
+        }
+        public void PlayerTurn2(IPlayer player)
+        {
+            PlayerDecision decision = PlayerTurn(player);
+            if (decision == PlayerDecision.Hit)
                 DealCardTo(player, deck);
             // TODO check here if player is bust, and if so, mark it somehow
         }
+        ////////////////////////////////////////////////////////////////////
         public void AddMoney(IPlayer player,int playerMoney)
         {
             bank.AddMoneyToPlayer(player.Id, playerMoney);
