@@ -30,13 +30,12 @@ namespace ConsoleGui
                 Console.ReadKey();
                 Console.Clear();
 
-                game.FirstDeal();
-
                 PrintBalances();
+                game.FirstDeal();
+                PrintHands();
+                
                 PlayerOutcomes();
                 PrintHands();
-                Console.ReadKey();
-                Console.Clear();
 
                 PrintWinners();
                 Console.ReadKey();
@@ -147,11 +146,9 @@ namespace ConsoleGui
                 if (currentWinner == Winninghand.Dealer)
                     Console.WriteLine($"{game.dealer.Name} won {Bank.GetPlayerBet(player.Id)}$ over {player.Name}");
                 if (currentWinner == Winninghand.Player)
-                    Console.WriteLine($"{game.dealer.Name} won {Bank.GetPlayerBet(player.Id)}$ over {player.Name}");
+                    Console.WriteLine($"{game.dealer.Name} lost {Bank.GetPlayerBet(player.Id)}$ against {player.Name}");
                 if (currentWinner == Winninghand.Draw)
                     Console.WriteLine($"Draw between {game.dealer.Name} and {player.Name}");
-
-
             }
         }
     }

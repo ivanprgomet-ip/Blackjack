@@ -19,11 +19,32 @@ namespace ConsoleGui
         {
             var dealerHandValue = GethandValue(dealer);
             var playerHandValue = GethandValue(player);
-            
-            if (dealerHandValue == playerHandValue)
-                return Winninghand.Draw;
 
-            return playerHandValue > dealerHandValue ? Winninghand.Player : Winninghand.Dealer;
+            if (playerHandValue > 21)
+            {
+                if (dealerHandValue > 21)
+                    return Winninghand.Draw;
+                else
+                    return Winninghand.Dealer;
+            }
+            else if (dealerHandValue > 21)
+            {
+                if (playerHandValue > 21)
+                    return Winninghand.Draw;
+                else
+                    return Winninghand.Player;
+            }
+            else
+            {
+                if (dealerHandValue == playerHandValue)
+                {
+                    return Winninghand.Draw;
+                }
+                else
+                {
+                    return playerHandValue > dealerHandValue ? Winninghand.Player : Winninghand.Dealer;
+                }
+            }
         }
         public static int GethandValue(Hand hand)
         {
