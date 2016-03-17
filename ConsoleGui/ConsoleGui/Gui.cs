@@ -98,14 +98,12 @@ namespace ConsoleGui
         private void PrintHands()
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
-
             foreach(IPlayer player in game.players)
             {
                 PrintHand(player);
                 Console.WriteLine();
             }
             PrintHand(game.dealer);
-
             Console.WriteLine();
             Console.ResetColor();
         }
@@ -124,12 +122,10 @@ namespace ConsoleGui
         private void PrintWinners()
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine("------------------------------");
             foreach (IPlayer player in game.players)
             {
                 Console.WriteLine(game.EvaluateWinner(player, game.dealer));
             }
-            Console.WriteLine("------------------------------");
             Console.ResetColor();
         }
 
