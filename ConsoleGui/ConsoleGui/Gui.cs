@@ -75,39 +75,42 @@ namespace ConsoleGui
             game.dealer.Hand.Clear();
             game.ResetDeck();
         }
+
+
+        ////////////////////////////////////////////////
+        private void PrintBet(IPlayer player)
+        {
+            Console.WriteLine(game.PlaceBet(player));
+        }
         private void PrintBets()
         {
             foreach (IPlayer player in game.players)
             {
-                Console.WriteLine(game.PlaceBet(player));
+                PrintBet(player);
             }
-            Console.WriteLine(game.PlaceBet(game.dealer));
-            Console.WriteLine("------------------------------");
+            PrintBet(game.dealer);
         }
-
+        ////////////////////////////////////////////////
         private void PrintHand(IPlayer player)
         {
             Console.Write($"{player.Name}: {game.GetHand(player)}");
         }
         private void PrintHands()
         {
-            //TODO create enum and later print special card combos in prints after playerhand
-            Console.ForegroundColor = ConsoleColor.DarkCyan;
+            Console.ForegroundColor = ConsoleColor.Cyan;
+
             foreach(IPlayer player in game.players)
             {
-                var playerBalance = GetBalance(player);
-                var playerHand = game.GetHand(player);
-                Console.Write($"{player.Name}: {playerHand}");
+                PrintHand(player);
                 Console.WriteLine();
             }
-            Console.ForegroundColor = ConsoleColor.DarkMagenta;
-            var dealerBalance = GetBalance(game.dealer);
-            var dealerHand = game.GetHand(game.dealer);
-            Console.Write($"{game.dealer.Name}: {dealerHand}");
+            PrintHand(game.dealer);
+
             Console.WriteLine();
-            Console.WriteLine("------------------------------");
             Console.ResetColor();
         }
+        ////////////////////////////////////////////////
+
         private void PlayerTurn()
         {
             foreach(IPlayer player in game.players)
