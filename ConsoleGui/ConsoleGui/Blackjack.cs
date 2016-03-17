@@ -49,12 +49,12 @@ namespace ConsoleGui
             {
                 foreach (IPlayer player in players)
                 {
-                    DealCardTo(player, deck);
+                    DealCardTo(player);
                 }
-                DealCardTo(dealer, deck);
+                DealCardTo(dealer);
             }
         }
-        private void DealCardTo(IPlayer player, Deck deck)
+        private void DealCardTo(IPlayer player)
         {
             player.Hand.AddCardToHand(deck.ReturnCard());
         }
@@ -74,7 +74,7 @@ namespace ConsoleGui
                 {
                     PlayerDecision pDecision = ReturnDecision(player);
                     if (pDecision == PlayerDecision.Hit)
-                        DealCardTo(player, deck);
+                        DealCardTo(player);
                     else
                         bustOrStay = true;
                 }
@@ -112,28 +112,6 @@ namespace ConsoleGui
         {
             bank.ClearBets();
         }
-        public string EvaluateWinner(IPlayer player, AiDealer dealer)
-        {
-            //TODO transform into switch statements instead
-            Winninghand winner = Rules.EvaluateWinner(dealer.Hand, player.Hand);
-            var dealerBet = Bank.GetPlayerBet(dealer.Id);
-            var PlayerBet = Bank.GetPlayerBet(player.Id);
-
-            switch(winner)
-            {
-                case Winninghand.Dealer:
-                    AddMoney(dealer, PlayerBet);//adds the players bet amount to the dealer balance (who won)
-                    return string.Format($"{dealer.Name} won {PlayerBet}$ against {player.Name}");
-                case Winninghand.Player:
-                    AddMoney(player, dealerBet);//adds the dealers bet amount to the player balance (who won)
-                    return string.Format($"{dealer.Name} lost {dealerBet}$ against {player.Name}");
-                case Winninghand.Draw:
-                    AddMoney(player, PlayerBet);//money back to player
-                    AddMoney(dealer, dealerBet);//money back to dealer
-                    return string.Format($"Draw between {dealer.Name} and {player.Name}");
-            }
-            return string.Format("error");
-        }
         ////////////////////////////////////////////////////////////////////
         public string GetHand(IPlayer player)
         {
@@ -151,5 +129,32 @@ namespace ConsoleGui
             return string.Format($"({Rules.GethandValue(player.Hand)})");
         }
         ////////////////////////////////////////////////////////////////////
+        //public string EvaluateWinner(IPlayer player, AiDealer dealer)
+        //{
+        //    //TODO transform into switch statements instead
+        //    Winninghand winner = Rules.EvaluateWinner(dealer.Hand, player.Hand);
+        //    var dealerBet = Bank.GetPlayerBet(dealer.Id);
+        //    var PlayerBet = Bank.GetPlayerBet(player.Id);
+
+        //    switch(winner)
+        //    {
+        //        case Winninghand.Dealer:
+        //            AddMoney(dealer, PlayerBet);//adds the players bet amount to the dealer balance (who won)
+        //            return string.Format($"{dealer.Name} won {PlayerBet}$ against {player.Name}");
+        //        case Winninghand.Player:
+        //            AddMoney(player, dealerBet);//adds the dealers bet amount to the player balance (who won)
+        //            return string.Format($"{dealer.Name} lost {dealerBet}$ against {player.Name}");
+        //        case Winninghand.Draw:
+        //            AddMoney(player, PlayerBet);//money back to player
+        //            AddMoney(dealer, dealerBet);//money back to dealer
+        //            return string.Format($"Draw between {dealer.Name} and {player.Name}");
+        //    }
+        //    return string.Format("error");
+        //}
+        public Winninghand ReturnWinner(IPlayer player, AiDealer dealer)
+        {
+            Winninghand winner = Rules.EvaluateWinner(player.Hand, dealer.Hand);
+            return winner;
+        }
     }
 }

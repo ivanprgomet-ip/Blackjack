@@ -30,12 +30,13 @@ namespace ConsoleGui
                 Console.ReadKey();
                 Console.Clear();
 
-                PrintBalances();
                 game.FirstDeal();
 
-                PrintHands();
+                PrintBalances();
                 PlayerOutcomes();
                 PrintHands();
+                Console.ReadKey();
+                Console.Clear();
 
                 PrintWinners();
                 Console.ReadKey();
@@ -52,23 +53,6 @@ namespace ConsoleGui
             game.AddMoney(game.dealer, dealerMoney);
         }
 
-        private string GetBalance(IPlayer player)
-        {
-            return Bank.GetPlayerMoney(player.Id).ToString();
-        }
-        private void PrintBalances()
-        {
-            Console.BackgroundColor = ConsoleColor.DarkBlue;
-            foreach(IPlayer player in game.players)
-            {
-                var PBalance= Bank.GetPlayerMoney(player.Id);
-                Console.Write($"{player.Name}: {PBalance}$ | ");
-            }
-            var DBalance = Bank.GetPlayerMoney(game.dealer.Id);
-            Console.Write($"{game.dealer.Name}: {DBalance}$ ");
-            Console.WriteLine();
-            Console.ResetColor();
-        }
         private void NewRound()
         {
             game.ClearBets();
@@ -79,7 +63,14 @@ namespace ConsoleGui
             game.dealer.Hand.Clear();
             game.ResetDeck();
         }
-
+        private void NewGame()
+        {
+            foreach(IPlayer player in game.players)
+            {
+                game.RemovePlayer(player);
+            }
+            game.RemovePlayer(game.dealer);
+        }
         ////////////////////////////////////////////////
         private string RtrnBet(IPlayer player)
         {
@@ -111,7 +102,24 @@ namespace ConsoleGui
             Console.ResetColor();
         }
         ////////////////////////////////////////////////
-        
+        private string RtrnBalance(IPlayer player)
+        {
+            return Bank.GetPlayerMoney(player.Id).ToString();
+        }
+        private void PrintBalances()
+        {
+            Console.BackgroundColor = ConsoleColor.DarkBlue;
+            foreach(IPlayer player in game.players)
+            {
+                var PBalance= Bank.GetPlayerMoney(player.Id);
+                Console.Write($"{player.Name}: {PBalance}$ | ");
+            }
+            var DBalance = Bank.GetPlayerMoney(game.dealer.Id);
+            Console.Write($"{game.dealer.Name}: {DBalance}$ ");
+            Console.WriteLine();
+            Console.ResetColor();
+        }
+        ////////////////////////////////////////////////
         private void PlayerOutcomes()
         {
             foreach(IPlayer player in game.players)
@@ -121,24 +129,30 @@ namespace ConsoleGui
             game.DecisionOutcome(game.dealer);
         }
 
-
-        private void PrintWinners()
-        {
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            foreach (IPlayer player in game.players)
-            {
-                Console.WriteLine(game.EvaluateWinner(player, game.dealer));
-            }
-            Console.ResetColor();
-        }
-
-        private void NewGame()
+        //private void PrintWinners()
+        //{
+        //    Console.ForegroundColor = ConsoleColor.Yellow;
+        //    foreach (IPlayer player in game.players)
+        //    {
+        //        Console.WriteLine(game.EvaluateWinner(player, game.dealer));
+        //    }
+        //    Console.ResetColor();
+        //}
+        private void PrintWinners()//TODO TEST METHOD
         {
             foreach(IPlayer player in game.players)
             {
-                game.RemovePlayer(player);
+                Winninghand currentWinner = game.ReturnWinner(player, game.dealer);
+
+                if (currentWinner == Winninghand.Dealer)
+                    Console.WriteLine($"{game.dealer.Name} won {Bank.GetPlayerBet(player.Id)}$ over {player.Name}");
+                if (currentWinner == Winninghand.Player)
+                    Console.WriteLine($"{game.dealer.Name} won {Bank.GetPlayerBet(player.Id)}$ over {player.Name}");
+                if (currentWinner == Winninghand.Draw)
+                    Console.WriteLine($"Draw between {game.dealer.Name} and {player.Name}");
+
+
             }
-            game.RemovePlayer(game.dealer);
         }
     }
 }

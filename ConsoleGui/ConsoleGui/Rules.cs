@@ -15,7 +15,7 @@ namespace ConsoleGui
 
     public class Rules
     {
-        public static Winninghand EvaluateWinner(Hand dealer, Hand player)
+        public static Winninghand EvaluateWinner(Hand player, Hand dealer)
         {
             var dealerHandValue = GethandValue(dealer);
             var playerHandValue = GethandValue(player);
