@@ -59,15 +59,26 @@ namespace ConsoleGui
             player.Hand.AddCardToHand(deck.ReturnCard());
         }
         ////////////////////////////////////////////////////////////////////
-        public PlayerDecision PlayerTurn(IPlayer player)
+        public PlayerDecision ReturnDecision(IPlayer player)
         {
             return player.MakeDecision(player.Hand);
         }
-        public void PlayerTurn2(IPlayer player)
+        public void DecisionOutcome(IPlayer player)
         {
-            PlayerDecision decision = PlayerTurn(player);
-            if (decision == PlayerDecision.Hit)
-                DealCardTo(player, deck);
+            bool bustOrStay = false;
+            while(!bustOrStay)
+            {
+                if (Rules.GethandValue(player.Hand) > 21)
+                    bustOrStay = true;
+                else
+                {
+                    PlayerDecision pDecision = ReturnDecision(player);
+                    if (pDecision == PlayerDecision.Hit)
+                        DealCardTo(player, deck);
+                    else
+                        bustOrStay = true;
+                }
+            }
             // TODO check here if player is bust, and if so, mark it somehow
         }
         ////////////////////////////////////////////////////////////////////

@@ -115,9 +115,9 @@ namespace ConsoleGui
         {
             foreach(IPlayer player in game.players)
             {
-                game.PlayerTurn2(player);
+                game.DecisionOutcome(player);
             }
-            game.PlayerTurn2(game.dealer);
+            game.DecisionOutcome(game.dealer);
         }
 
 
