@@ -26,7 +26,10 @@ namespace ConsoleGui
             if (Rules.GethandValue(Hand) >= 21)
                 return PlayerDecision.Stay;
 
+            Console.BackgroundColor = ConsoleColor.DarkRed;
             Console.Write($"{Name}: hit/stay (h/s)? >> ");
+            Console.ResetColor();
+
             var choice = Console.ReadLine();
 
             return choice == "h" ? PlayerDecision.Hit : PlayerDecision.Stay;
@@ -41,8 +44,8 @@ namespace ConsoleGui
 
             do
             {
+                Console.BackgroundColor = ConsoleColor.DarkRed;
                 Console.Write($"{Name}: enter bet between 1-10$ >> ");
-
                 while (!int.TryParse(Console.ReadLine(), out bet))
                     Console.WriteLine("Please enter bet between 1-10$ >> ");
                 if (bet < 1 || bet > 10)
@@ -53,6 +56,7 @@ namespace ConsoleGui
                 else
                     invalidBet = false;
             } while (invalidBet);
+            Console.ResetColor();
             return bet;
         }
     }

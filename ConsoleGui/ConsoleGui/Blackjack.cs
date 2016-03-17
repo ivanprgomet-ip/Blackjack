@@ -103,7 +103,7 @@ namespace ConsoleGui
                     return string.Format($"{player.Name}: bet higher than current balance");
                 case BetValidity.BetValid:
                     bank.AddBet(player.Id, bet);// At this point bet is valid and has ben added to bank and amount removed from balance
-                    return string.Format($"{player.Name}: bet {bet}$");
+                    return string.Format($"{player.Name} bet {bet}$ ");
                 default:
                     return string.Format($"{player.Name}: something went wrong");
             }            
@@ -132,25 +132,7 @@ namespace ConsoleGui
                     AddMoney(dealer, dealerBet);//money back to dealer
                     return string.Format($"Draw between {dealer.Name} and {player.Name}");
             }
-            return string.Format("something went horribly wrong in the switch");
-
-
-            //if (winner == Winninghand.Dealer)
-            //{
-            //    AddMoney(dealer, PlayerBet);//adds the players bet amount to the dealer balance (who won)
-            //    return string.Format($"{dealer.Name} won {PlayerBet}$ against {player.Name}");
-            //}
-            //else if (winner == Winninghand.Player)
-            //{
-            //    AddMoney(player, dealerBet);//adds the dealers bet amount to the player balance (who won)
-            //    return string.Format($"{dealer.Name} lost {dealerBet}$ against {player.Name}");
-            //}
-            //else /*(winner == Winninghand.Draw)*/
-            //{
-            //    AddMoney(player, PlayerBet);//money back to player
-            //    AddMoney(dealer, dealerBet);//money back to dealer
-            //    return string.Format($"Draw between {dealer.Name} and {player.Name}");
-            //}
+            return string.Format("error");
         }
         ////////////////////////////////////////////////////////////////////
         public string GetHand(IPlayer player)

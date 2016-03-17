@@ -34,7 +34,7 @@ namespace ConsoleGui
                 game.FirstDeal();
 
                 PrintHands();
-                PlayerTurns();
+                PlayerOutcomes();
                 PrintHands();
 
                 PrintWinners();
@@ -52,13 +52,17 @@ namespace ConsoleGui
             game.AddMoney(game.dealer, dealerMoney);
         }
 
+        private string GetBalance(IPlayer player)
+        {
+            return Bank.GetPlayerMoney(player.Id).ToString();
+        }
         private void PrintBalances()
         {
             Console.BackgroundColor = ConsoleColor.DarkBlue;
             foreach(IPlayer player in game.players)
             {
                 var PBalance= Bank.GetPlayerMoney(player.Id);
-                Console.Write($"{player.Name}: {PBalance}$ ");
+                Console.Write($"{player.Name}: {PBalance}$ | ");
             }
             var DBalance = Bank.GetPlayerMoney(game.dealer.Id);
             Console.Write($"{game.dealer.Name}: {DBalance}$ ");
@@ -76,40 +80,39 @@ namespace ConsoleGui
             game.ResetDeck();
         }
 
-
         ////////////////////////////////////////////////
-        private void PrintBet(IPlayer player)
+        private string RtrnBet(IPlayer player)
         {
-            Console.WriteLine(game.PlaceBet(player));
+            return string.Format(game.PlaceBet(player));
         }
         private void PrintBets()
         {
             foreach (IPlayer player in game.players)
             {
-                PrintBet(player);
+                Console.WriteLine(RtrnBet(player));
             }
-            PrintBet(game.dealer);
+            Console.WriteLine(RtrnBet(game.dealer));
         }
         ////////////////////////////////////////////////
-        private void PrintHand(IPlayer player)
+        private string RtrnHand(IPlayer player)
         {
-            Console.Write($"{player.Name}: {game.GetHand(player)}");
+            return string.Format(($"{player.Name}: {game.GetHand(player)}"));
         }
         private void PrintHands()
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
             foreach(IPlayer player in game.players)
             {
-                PrintHand(player);
+                Console.Write(RtrnHand(player));
                 Console.WriteLine();
             }
-            PrintHand(game.dealer);
+            Console.Write(RtrnHand(game.dealer));
             Console.WriteLine();
             Console.ResetColor();
         }
         ////////////////////////////////////////////////
-
-        private void PlayerTurns()
+        
+        private void PlayerOutcomes()
         {
             foreach(IPlayer player in game.players)
             {
@@ -129,10 +132,6 @@ namespace ConsoleGui
             Console.ResetColor();
         }
 
-        private string GetBalance(IPlayer player)
-        {
-            return Bank.GetPlayerMoney(player.Id).ToString();
-        }
         private void NewGame()
         {
             foreach(IPlayer player in game.players)
