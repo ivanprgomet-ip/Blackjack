@@ -28,10 +28,11 @@ namespace ConsoleGui
             var choice = Console.ReadLine();
             return choice == "h" ? PlayerDecision.Hit : PlayerDecision.Stay;
         }
-        // will only return bets between 1 and 10.
+        
         public int MakeBet()
         {
-            //Betting process for human players:
+            //Betting process for human players.
+            //will only return bets between 1 and 10.
             var invalidBet = true;
             var bet = 0;
 
@@ -43,7 +44,7 @@ namespace ConsoleGui
                 if (bet < 1 || bet > 10)
                 {
                     Console.BackgroundColor = ConsoleColor.DarkRed;
-                    Console.WriteLine("Bet not accepted. Place bet between 1-10$ >> ");
+                    Console.WriteLine($"{Name}: Bet is not 1-10$");
                     Console.ResetColor();
                     invalidBet = true;
                 }

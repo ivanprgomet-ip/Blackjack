@@ -54,7 +54,7 @@ namespace ConsoleGui
                 DealCardTo(dealer);
             }
         }
-        private void DealCardTo(IPlayer player)
+        public void DealCardTo(IPlayer player)
         {
             player.Hand.AddCardToHand(deck.ReturnCard());
         }
@@ -63,24 +63,23 @@ namespace ConsoleGui
         {
             return player.MakeDecision(player.Hand);
         }
-        public void DecisionOutcome(IPlayer player)
-        {
-            bool bustOrStay = false;
-            while(!bustOrStay)
-            {
-                if (Rules.GethandValue(player.Hand) > 21)
-                    bustOrStay = true;
-                else
-                {
-                    PlayerDecision pDecision = ReturnDecision(player);
-                    if (pDecision == PlayerDecision.Hit)
-                        DealCardTo(player);
-                    else
-                        bustOrStay = true;
-                }
-            }
-            // TODO check here if player is bust, and if so, mark it somehow
-        }
+        //public void HitOrStay(IPlayer player)
+        //{
+        //    bool bustOrStay = false;
+        //    while(!bustOrStay)
+        //    {
+        //        if (Rules.GethandValue(player.Hand) > 21)
+        //            bustOrStay = true;
+        //        else
+        //        {
+        //            PlayerDecision pDecision = ReturnDecision(player);
+        //            if (pDecision == PlayerDecision.Hit)
+        //                DealCardTo(player);
+        //            else
+        //                bustOrStay = true;
+        //        }
+        //    }
+        //}
         ////////////////////////////////////////////////////////////////////
         public void AddMoney(IPlayer player,int playerMoney)
         {
@@ -126,7 +125,6 @@ namespace ConsoleGui
             return string.Format($"({Rules.GethandValue(player.Hand)})");
         }
         ////////////////////////////////////////////////////////////////////
-        
         private bool isBankrupt(IPlayer player)
         {
             //checks if player balance is 0
@@ -150,43 +148,11 @@ namespace ConsoleGui
                 bankruptPlayers.Add(dealer);
 
             return bankruptPlayers;
-        }
-        //public void RemoveBankrupt()
-        //{
-        //    List<IPlayer> bankruptPlayers = ReturnBankrupt();//returns a list of bankrupt players by checking each and every players balance
-            
-        //    foreach(IPlayer player in bankruptPlayers)
-        //    {
-        //        players.Remove(player);
-        //    }
-        //}
-
+        }     
         ////////////////////////////////////////////////////////////////////
-
-        //public string EvaluateWinner(IPlayer player, AiDealer dealer)
-        //{
-        //    //TODO transform into switch statements instead
-        //    Winninghand winner = Rules.EvaluateWinner(dealer.Hand, player.Hand);
-        //    var dealerBet = Bank.GetPlayerBet(dealer.Id);
-        //    var PlayerBet = Bank.GetPlayerBet(player.Id);
-
-        //    switch(winner)
-        //    {
-        //        case Winninghand.Dealer:
-        //            AddMoney(dealer, PlayerBet);//adds the players bet amount to the dealer balance (who won)
-        //            return string.Format($"{dealer.Name} won {PlayerBet}$ against {player.Name}");
-        //        case Winninghand.Player:
-        //            AddMoney(player, dealerBet);//adds the dealers bet amount to the player balance (who won)
-        //            return string.Format($"{dealer.Name} lost {dealerBet}$ against {player.Name}");
-        //        case Winninghand.Draw:
-        //            AddMoney(player, PlayerBet);//money back to player
-        //            AddMoney(dealer, dealerBet);//money back to dealer
-        //            return string.Format($"Draw between {dealer.Name} and {player.Name}");
-        //    }
-        //    return string.Format("error");
-        //}
         public Winninghand ReturnWinner(IPlayer player, AiDealer dealer)
         {
+            //returns winner: a player OR the dealer:
             Winninghand winner = Rules.EvaluateWinner(player.Hand, dealer.Hand);
             return winner;
         }

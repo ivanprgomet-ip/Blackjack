@@ -11,6 +11,7 @@ namespace ConsoleGui
         private Blackjack game = new Blackjack();
 
         private bool isNewGame = false;//gets asked for new game when dealer runs out of money
+        private bool pActive = true;
 
         public void Run()
         {
@@ -18,7 +19,7 @@ namespace ConsoleGui
             game.AddPlayer(new AiPlayer("james"));
             game.AddPlayer(new HumanPlayer("dalius"));
 
-            InitialMoney(5,250);
+            InitialMoney(5,20);
 
             while (!isNewGame)
             {
@@ -35,11 +36,19 @@ namespace ConsoleGui
                 PrintBalances();
                 game.FirstDeal();
                 PrintHands();
-                
-                PlayerOutcomes();
-                PrintHands();
 
-                PrintWinners();
+                while (pActive)//someone is active
+                {
+                    pActive= PlayersHitOrStay();
+                    if (!pActive)
+                        break;
+                }
+
+                Console.WriteLine(">> press any button for results <<");
+                Console.ReadKey();
+                UpdateWinners();
+
+                Console.WriteLine(">> press any button for next round <<");
                 Console.ReadKey();
                 Console.Clear();
             }
@@ -52,6 +61,7 @@ namespace ConsoleGui
             }
             game.AddMoney(game.dealer, dealerMoney);
         }
+        ////////////////////////////////////////////////
         private void RemoveBankruptPlayers()
         {
             //game.returnbankrupt() returns a list (of bankrupt players)
@@ -62,10 +72,13 @@ namespace ConsoleGui
             {
                 game.players.Remove(player);
                 Console.WriteLine($"{player.Name} left");
+                Console.ReadKey();
+                Console.Clear();
             }
         }
         private void NewRound()
         {
+            pActive = true;//resetting pActive variable
             RemoveBankruptPlayers();//remove bankrupt players before every round
 
             game.ClearBets();
@@ -108,7 +121,7 @@ namespace ConsoleGui
             {
                 ValidateBet(player);
             }
-            ValidateBet(game.dealer);
+            //ValidateBet(game.dealer);//TODO dealer does not bet, only calls separate bets
             Console.WriteLine();
         }
 
@@ -124,7 +137,7 @@ namespace ConsoleGui
             {
                 PrintBet(player);
             }
-            PrintBet(game.dealer);
+            //PrintBet(game.dealer);//TODO dealer does not bet, only calls separate bets
             Console.WriteLine();
         }
         ////////////////////////////////////////////////
@@ -166,27 +179,53 @@ namespace ConsoleGui
             Console.ResetColor();
         }
         ////////////////////////////////////////////////
-        private void PlayerOutcomes()
+        private void HitOrStay(IPlayer player)
         {
-            foreach(IPlayer player in game.players)
+            bool bustOrStay = false;
+            while (!bustOrStay)
             {
-                game.DecisionOutcome(player);
+                if (Rules.GethandValue(player.Hand) > 21)
+                    bustOrStay = true;
+                else
+                {
+                    PlayerDecision pDecision = game.ReturnDecision(player);
+                    if (pDecision == PlayerDecision.Hit)
+                    {
+                        game.DealCardTo(player);
+                        Console.Clear();
+                        PrintBalances();
+                        PrintHands();
+                    }
+                    else
+                        bustOrStay = true;
+                }
             }
-            game.DecisionOutcome(game.dealer);
         }
 
-        private void PrintWinners()//TODO TEST METHOD
+        public bool PlayersHitOrStay()
         {
             foreach(IPlayer player in game.players)
             {
+                HitOrStay(player);
+            }
+            HitOrStay(game.dealer);
+            return false;//returns false to say there is no more active players
+        }
+        private void UpdateWinners()//TODO winners not getting the other players bet atm
+        {
+            foreach(IPlayer player in game.players)
+            {
+                int pBet = Bank.GetPlayerBet(player.Id);
                 Winninghand currentWinner = game.ReturnWinner(player, game.dealer);
+                Console.ForegroundColor = ConsoleColor.Yellow;
 
                 if (currentWinner == Winninghand.Dealer)
-                    Console.WriteLine($"{game.dealer.Name} won {Bank.GetPlayerBet(player.Id)}$ over {player.Name}");
+                    Console.WriteLine($"{game.dealer.Name} +{pBet}$ | {player.Name} -{pBet}$");
                 if (currentWinner == Winninghand.Player)
-                    Console.WriteLine($"{game.dealer.Name} lost {Bank.GetPlayerBet(player.Id)}$ against {player.Name}");
+                    Console.WriteLine($"{game.dealer.Name} -{pBet}$ | {player.Name} +{pBet}$");
                 if (currentWinner == Winninghand.Draw)
-                    Console.WriteLine($"Draw between {game.dealer.Name} and {player.Name}");
+                    Console.WriteLine($"Draw between {game.dealer.Name} and {player.Name} ({pBet}$ returned)");
+                Console.ResetColor();
             }
         }
     }
