@@ -15,8 +15,8 @@ namespace ConsoleGui
         public void Run()
         {
             game.AddPlayer(new HumanPlayer("ivan"));
-            game.AddPlayer(new HumanPlayer("dalius"));
             game.AddPlayer(new AiPlayer("james"));
+            game.AddPlayer(new HumanPlayer("dalius"));
 
             InitialMoney(5,250);
 
@@ -25,6 +25,7 @@ namespace ConsoleGui
                 NewRound();
                 PrintBalances();
                 ValidateBets();
+                PrintBets();
 
                 Console.WriteLine("press any button to deal cards");
                 Console.ReadKey();
@@ -71,7 +72,7 @@ namespace ConsoleGui
             game.RemovePlayer(game.dealer);
         }
         ////////////////////////////////////////////////
-        private void ValidateBet(IPlayer player)
+        private string ValidateBet(IPlayer player)
         {
             var betIsValid = game.ValidateBet(player);
             var pName = player.Name;
@@ -84,8 +85,9 @@ namespace ConsoleGui
                 if (betIsValid)
                     break;
             }
-            Console.WriteLine();
-            Console.WriteLine($"{pName} bet {Bank.GetPlayerBet(player.Id)}$");
+            return ($"{pName} bet {Bank.GetPlayerBet(player.Id)}$");
+            //Console.WriteLine();
+            //Console.WriteLine($"{pName} bet {Bank.GetPlayerBet(player.Id)}$");
         }
         private void ValidateBets()
         {
@@ -94,6 +96,20 @@ namespace ConsoleGui
                 ValidateBet(player);
             }
             ValidateBet(game.dealer);
+            Console.WriteLine();
+        }
+
+        private void PrintBets()
+        {
+            foreach (IPlayer player in game.players)
+            {
+                var pBet = Bank.GetPlayerBet(player.Id);
+                var pName = player.Name;
+                Console.WriteLine($"{pName} bet {pBet}$");
+            }
+            var dBet = Bank.GetPlayerBet(game.dealer.Id);
+            var dName = game.dealer.Name;
+            Console.WriteLine($"{dName} bet {dBet}$");
             Console.WriteLine();
         }
         ////////////////////////////////////////////////
