@@ -15,7 +15,7 @@ namespace ConsoleGui
         public void Run()
         {
             game.AddPlayer(new HumanPlayer("ivan"));
-            game.AddPlayer(new AiPlayer("dalius"));
+            game.AddPlayer(new HumanPlayer("dalius"));
             game.AddPlayer(new AiPlayer("james"));
 
             InitialMoney(5,250);
@@ -24,7 +24,7 @@ namespace ConsoleGui
             {
                 NewRound();
                 PrintBalances();
-                PrintBets();
+                ValidateBets();
 
                 Console.WriteLine("press any button to deal cards");
                 Console.ReadKey();
@@ -71,28 +71,30 @@ namespace ConsoleGui
             game.RemovePlayer(game.dealer);
         }
         ////////////////////////////////////////////////
-        private void PrintBetMsg(IPlayer player)
+        private void ValidateBet(IPlayer player)
         {
-            var betIsValid = game.ValidBet(player);
+            var betIsValid = game.ValidateBet(player);
             var pName = player.Name;
 
             while (!betIsValid)
             {
-                Console.WriteLine(($"{pName}: BALANCE<BET"));
-                betIsValid = game.ValidBet(player);
+                Console.WriteLine(($"{pName}: Balance lower then bet amount!"));
+                betIsValid = game.ValidateBet(player);
 
                 if (betIsValid)
                     break;
             }
-            Console.WriteLine($"{pName} bet {Bank.GetPlayerBet(player.Id)}");
+            Console.WriteLine();
+            Console.WriteLine($"{pName} bet {Bank.GetPlayerBet(player.Id)}$");
         }
-        private void PrintBets()
+        private void ValidateBets()
         {
             foreach (IPlayer player in game.players)
             {
-                PrintBetMsg(player);
+                ValidateBet(player);
             }
-            PrintBetMsg(game.dealer);
+            ValidateBet(game.dealer);
+            Console.WriteLine();
         }
         ////////////////////////////////////////////////
         private string RtrnBust(IPlayer player)
@@ -143,15 +145,6 @@ namespace ConsoleGui
             game.DecisionOutcome(game.dealer);
         }
 
-        //private void PrintWinners()
-        //{
-        //    Console.ForegroundColor = ConsoleColor.Yellow;
-        //    foreach (IPlayer player in game.players)
-        //    {
-        //        Console.WriteLine(game.EvaluateWinner(player, game.dealer));
-        //    }
-        //    Console.ResetColor();
-        //}
         private void PrintWinners()//TODO TEST METHOD
         {
             foreach(IPlayer player in game.players)

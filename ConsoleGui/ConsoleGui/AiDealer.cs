@@ -24,7 +24,7 @@ namespace ConsoleGui
                 return PlayerDecision.Stay;
             return PlayerDecision.Hit;
         }
-        public int TryBet()
+        public int MakeBet()
         {
             var cash = Bank.GetPlayerMoney(Id);
 

@@ -45,7 +45,7 @@ namespace ConsoleGui
                     return PlayerDecision.Hit;
             }
         }
-        public int TryBet()
+        public int MakeBet()
         {
             var cash = Bank.GetPlayerMoney(Id);
 

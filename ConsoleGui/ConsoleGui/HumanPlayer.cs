@@ -33,7 +33,7 @@ namespace ConsoleGui
             return choice == "h" ? PlayerDecision.Hit : PlayerDecision.Stay;
         }
         // will only return bets between 1 and 10.
-        public int TryBet()
+        public int MakeBet()
         {
             //Betting process for human players:
             var invalidBet = true;

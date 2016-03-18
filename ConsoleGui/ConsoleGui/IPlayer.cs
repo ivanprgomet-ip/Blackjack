@@ -11,7 +11,7 @@ namespace ConsoleGui
         Guid Id { get; }
         Hand Hand { get; }
         string Name { get; }
-        int TryBet();
+        int MakeBet();
         PlayerDecision MakeDecision(Hand hand);
     }
 }
