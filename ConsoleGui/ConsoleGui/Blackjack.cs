@@ -92,6 +92,7 @@ namespace ConsoleGui
             else
                 return false;//bet failed and never got to the bank
         }
+
         public void ClearBets()
         {
             bank.ClearBets();
@@ -143,6 +144,30 @@ namespace ConsoleGui
             //returns winner: a player OR the dealer:
             Winninghand winner = Rules.EvaluateWinner(player.Hand, dealer.Hand);
             return winner;
+        }
+        public bool CheckGameOver()
+        {
+            var DealerCash = Bank.GetPlayerMoney(dealer.Id);
+            if (DealerCash <= 0)
+                return true;
+            else
+                return false;
+        }
+        public void NewGame()
+        {
+            List<IPlayer> ToBeRemoved = new List<IPlayer>();
+
+            foreach (IPlayer player in players)
+            {
+                ToBeRemoved.Add(player);
+            }
+            ToBeRemoved.Add(dealer);
+
+            foreach(IPlayer player in ToBeRemoved)
+            {
+                RemovePlayer(player);
+            }
+
         }
     }
 }

@@ -10,48 +10,74 @@ namespace ConsoleGui
     {
         private Blackjack game = new Blackjack();
 
-        private bool isNewGame = false;//gets asked for new game when dealer runs out of money
         private bool pActive = true;
+        private bool GameIsOver;
+        private bool newGame = true;
 
         public void Run()
         {
+            while(newGame)
+            {
+            game.NewGame();
+            GameIsOver = false;
+
+                ////////
             game.AddPlayer(new HumanPlayer("ivan"));
             game.AddPlayer(new AiPlayer("james"));
-            game.AddPlayer(new HumanPlayer("dalius"));
+            InitialMoney(50,1);
+                ////////
 
-            InitialMoney(5,20);
-
-            while (!isNewGame)
-            {
-                NewRound();
-                PrintBalances();
-
-                ValidateBets();
-                PrintBets();
-
-                Console.WriteLine(">> press any button to deal cards <<");
-                Console.ReadKey();
-                Console.Clear();
-
-                PrintBalances();
-                game.FirstDeal();
-                PrintHands();
-
-                while (pActive)//someone is active
+                while (!GameIsOver)
                 {
-                    pActive= PlayersHitOrStay();
-                    if (!pActive)
+                    NewRound();
+                    PrintBalances();
+
+                    ValidateBets();
+                    PrintBets();
+
+                    Console.WriteLine(">> press any button to deal cards <<");
+                    Console.ReadKey();
+                    Console.Clear();
+
+                    PrintBalances();
+                    game.FirstDeal();
+                    PrintHands();
+
+                    while (pActive)//someone is active
+                    {
+                        pActive = PlayersHitOrStay();
+                        if (!pActive)
+                            break;
+                    }
+
+                    Console.WriteLine(">> press any button for results <<");
+                    Console.ReadKey();
+                    UpdateWinners();
+
+                    GameIsOver = game.CheckGameOver();//if dealer is bankrupt, game is over
+                    if (GameIsOver)
                         break;
+
+                    Console.WriteLine(">> press any button for next round <<");
+                    Console.ReadKey();
+                    Console.Clear();
                 }
-
-                Console.WriteLine(">> press any button for results <<");
-                Console.ReadKey();
-                UpdateWinners();
-
-                Console.WriteLine(">> press any button for next round <<");
-                Console.ReadKey();
+                StartNewGame();
                 Console.Clear();
             }
+        }
+
+        private void StartNewGame()
+        {
+            Console.WriteLine(">>> GAME OVER <<<");
+            Console.WriteLine("The house went bankrupt");
+            Console.WriteLine("Start New Game? y/n");
+            string decision = Console.ReadLine().ToLower();
+
+            if (decision.ToLower() == "y")
+                newGame = true;
+            else
+                newGame = false;
         }
 
         private void InitialMoney(int playersMoney,int dealerMoney)
@@ -79,6 +105,8 @@ namespace ConsoleGui
         }
         private void NewRound()
         {
+            
+
             pActive = true;//resetting pActive variable
             RemoveBankruptPlayers();//remove bankrupt players before every round
 
@@ -89,14 +117,6 @@ namespace ConsoleGui
             }
             game.dealer.Hand.Clear();
             game.ResetDeck();
-        }
-        private void NewGame()
-        {
-            foreach(IPlayer player in game.players)
-            {
-                game.RemovePlayer(player);
-            }
-            game.RemovePlayer(game.dealer);
         }
         ////////////////////////////////////////////////
         private string ValidateBet(IPlayer player)
@@ -169,9 +189,9 @@ namespace ConsoleGui
             Console.Write($"{player.Name}: {PBalance}$ | ");
         }
         private void PrintBalances()
-        {
+        { 
             Console.BackgroundColor = ConsoleColor.DarkGreen;
-            foreach(IPlayer player in game.players)
+            foreach (IPlayer player in game.players)
             {
                 PrintBalance(player);
             }
@@ -222,19 +242,19 @@ namespace ConsoleGui
 
                 if (currentWinner == Winninghand.Dealer)
                 {
-                    game.AddMoney(game.dealer, pBet);//add win $ to winner
+                    game.AddMoney(game.dealer, pBet);//add bet $ to dealer winner
                     game.RemoveMoney(player, pBet);//remove lost $ from loser
                     Console.WriteLine($"{game.dealer.Name} +{pBet}$ | {player.Name} -{pBet}$");
                 }
                 if (currentWinner == Winninghand.Player)
                 {
-                    game.AddMoney(player, pBet/**2*/);//add win $ to winner
+                    game.AddMoney(player, pBet * 2);//add bet*2 $ to player winner
                     game.RemoveMoney(game.dealer, pBet);//remove lost $ from loser
                     Console.WriteLine($"{game.dealer.Name} -{pBet}$ | {player.Name} +{pBet}$");
                 }
                 if (currentWinner == Winninghand.Draw)
                 {
-                    game.AddMoney(player, pBet);//reclaim $
+                    game.AddMoney(player, pBet);//player reclaim bet $
                     Console.WriteLine($"Draw between {game.dealer.Name} and {player.Name} ({pBet}$ returned)");
                 }
                 Console.ResetColor();

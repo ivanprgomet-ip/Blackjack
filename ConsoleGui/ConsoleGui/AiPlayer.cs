@@ -21,13 +21,6 @@ namespace ConsoleGui
 
         public PlayerDecision MakeDecision(Hand hand)
         {
-            /*
-            TODO: decide if Hand parameter is 
-            neccessary
-
-            ComputerPlayer betting-logic is 
-            based on bet amount and Hand value:
-            */
             var handValue = Rules.GethandValue(Hand);
 
             if (Bank.GetPlayerBet(Id) > 7)
