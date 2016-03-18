@@ -11,7 +11,6 @@ namespace ConsoleGui
         public Guid Id { get; }
         public Hand Hand { get; }
         public string Name { get; }
-
         public AiDealer(string name="dealer")
         {
             Name = name;

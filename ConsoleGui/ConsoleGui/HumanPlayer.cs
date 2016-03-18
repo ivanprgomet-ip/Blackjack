@@ -9,10 +9,9 @@ namespace ConsoleGui
     public class HumanPlayer : IPlayer
     {
         public Guid Id { get; }
-
         public Hand Hand { get; }
-
         public string Name { get;}
+
 
         public HumanPlayer(string name)
         {
@@ -20,7 +19,6 @@ namespace ConsoleGui
             Id = Guid.NewGuid();
             Hand = new Hand();
         }
-
         public PlayerDecision MakeDecision(Hand hand)
         {
             if (Rules.GethandValue(Hand) >= 21)
@@ -34,7 +32,6 @@ namespace ConsoleGui
 
             return choice == "h" ? PlayerDecision.Hit : PlayerDecision.Stay;
         }
-
         // will only return bets between 1 and 10.
         public int MakeBet()
         {

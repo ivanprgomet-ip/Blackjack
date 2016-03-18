@@ -84,6 +84,10 @@ namespace ConsoleGui
             Console.WriteLine(RtrnBet(game.dealer));
         }
         ////////////////////////////////////////////////
+        private string RtrnBust(IPlayer player)
+        {
+            return Rules.isBust(player.Hand) ? "BUST" : "";
+        }
         private string RtrnHand(IPlayer player)
         {
             return string.Format(($"{player.Name}: {game.GetHand(player)}"));
@@ -93,10 +97,10 @@ namespace ConsoleGui
             Console.ForegroundColor = ConsoleColor.Cyan;
             foreach(IPlayer player in game.players)
             {
-                Console.Write(RtrnHand(player));
+                Console.Write(RtrnHand(player)+" "+RtrnBust(player));
                 Console.WriteLine();
             }
-            Console.Write(RtrnHand(game.dealer));
+            Console.Write(RtrnHand(game.dealer) + " " + RtrnBust(game.dealer));
             Console.WriteLine();
             Console.ResetColor();
         }

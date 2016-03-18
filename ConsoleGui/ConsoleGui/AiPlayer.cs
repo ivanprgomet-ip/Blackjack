@@ -12,7 +12,6 @@ namespace ConsoleGui
 
         public Hand Hand { get; }
         public string Name { get; }
-
         public AiPlayer(string name)
         {
             Name = name;
