@@ -53,6 +53,7 @@ namespace ConsoleGui
                 Console.Clear();
             }
         }
+
         private void InitialMoney(int playersMoney,int dealerMoney)
         {
             foreach (IPlayer player in game.players)
@@ -220,11 +221,22 @@ namespace ConsoleGui
                 Console.ForegroundColor = ConsoleColor.Yellow;
 
                 if (currentWinner == Winninghand.Dealer)
+                {
+                    game.AddMoney(game.dealer, pBet);//add win $ to winner
+                    game.RemoveMoney(player, pBet);//remove lost $ from loser
                     Console.WriteLine($"{game.dealer.Name} +{pBet}$ | {player.Name} -{pBet}$");
+                }
                 if (currentWinner == Winninghand.Player)
+                {
+                    game.AddMoney(player, pBet/**2*/);//add win $ to winner
+                    game.RemoveMoney(game.dealer, pBet);//remove lost $ from loser
                     Console.WriteLine($"{game.dealer.Name} -{pBet}$ | {player.Name} +{pBet}$");
+                }
                 if (currentWinner == Winninghand.Draw)
+                {
+                    game.AddMoney(player, pBet);//reclaim $
                     Console.WriteLine($"Draw between {game.dealer.Name} and {player.Name} ({pBet}$ returned)");
+                }
                 Console.ResetColor();
             }
         }

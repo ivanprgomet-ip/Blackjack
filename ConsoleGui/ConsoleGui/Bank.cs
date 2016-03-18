@@ -35,6 +35,10 @@ namespace ConsoleGui
             else
                 _balance[id] += money;
         }
+        public void RemoveMoneyFromPlayer(Guid id, int money)
+        {
+            _balance[id] -= money;//TODO. check if works
+        }
         public void RemoveBetAndBalance(Guid id)
         {
             _bets.Remove(id);

@@ -63,28 +63,16 @@ namespace ConsoleGui
         {
             return player.MakeDecision(player.Hand);
         }
-        //public void HitOrStay(IPlayer player)
-        //{
-        //    bool bustOrStay = false;
-        //    while(!bustOrStay)
-        //    {
-        //        if (Rules.GethandValue(player.Hand) > 21)
-        //            bustOrStay = true;
-        //        else
-        //        {
-        //            PlayerDecision pDecision = ReturnDecision(player);
-        //            if (pDecision == PlayerDecision.Hit)
-        //                DealCardTo(player);
-        //            else
-        //                bustOrStay = true;
-        //        }
-        //    }
-        //}
         ////////////////////////////////////////////////////////////////////
         public void AddMoney(IPlayer player,int playerMoney)
         {
             bank.AddMoneyToPlayer(player.Id, playerMoney);
         }
+        public void RemoveMoney(IPlayer player, int playerMoney)
+        {
+            bank.RemoveMoneyFromPlayer(player.Id, playerMoney);
+        }
+
         public void ResetDeck()
         {
             deck = new Deck();
