@@ -144,9 +144,11 @@ namespace ConsoleGui
                 if (isBankrupt(player))
                 {
                     bankruptPlayers.Add(player);
-                    //RemovePlayer(player);
                 }
             }
+            if (isBankrupt(dealer))
+                bankruptPlayers.Add(dealer);
+
             return bankruptPlayers;
         }
         //public void RemoveBankrupt()

@@ -52,7 +52,6 @@ namespace ConsoleGui
             }
             game.AddMoney(game.dealer, dealerMoney);
         }
-
         private void RemoveBankruptPlayers()
         {
             //game.returnbankrupt() returns a list (of bankrupt players)
@@ -67,7 +66,7 @@ namespace ConsoleGui
         }
         private void NewRound()
         {
-            RemoveBankruptPlayers();//remove broke playrs
+            RemoveBankruptPlayers();//remove bankrupt players before every round
 
             game.ClearBets();
             foreach(IPlayer player in game.players)
@@ -102,8 +101,6 @@ namespace ConsoleGui
                     break;
             }
             return ($"{pName} bet {Bank.GetPlayerBet(player.Id)}$");
-            //Console.WriteLine();
-            //Console.WriteLine($"{pName} bet {Bank.GetPlayerBet(player.Id)}$");
         }
         private void ValidateBets()
         {
