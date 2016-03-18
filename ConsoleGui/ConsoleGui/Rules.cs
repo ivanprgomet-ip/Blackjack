@@ -17,32 +17,32 @@ namespace ConsoleGui
     {
         public static Winninghand EvaluateWinner(Hand player, Hand dealer)
         {
-            var dealerHandValue = GethandValue(dealer);
-            var playerHandValue = GethandValue(player);
+            var dHandValue = GethandValue(dealer);
+            var pHandValue = GethandValue(player);
 
-            if (playerHandValue > 21)
+            if (pHandValue > 21)
             {
-                if (dealerHandValue > 21)
+                if (dHandValue > 21)
                     return Winninghand.Draw;
                 else
                     return Winninghand.Dealer;
             }
-            else if (dealerHandValue > 21)
+            else if (dHandValue > 21)
             {
-                if (playerHandValue > 21)
+                if (pHandValue > 21)
                     return Winninghand.Draw;
                 else
                     return Winninghand.Player;
             }
             else
             {
-                if (dealerHandValue == playerHandValue)
+                if (dHandValue == pHandValue)
                 {
                     return Winninghand.Draw;
                 }
                 else
                 {
-                    return playerHandValue > dealerHandValue ? Winninghand.Player : Winninghand.Dealer;
+                    return pHandValue > dHandValue ? Winninghand.Player : Winninghand.Dealer;
                 }
             }
         }
