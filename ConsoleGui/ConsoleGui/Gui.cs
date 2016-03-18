@@ -24,7 +24,7 @@ namespace ConsoleGui
                 ////////
             game.AddPlayer(new HumanPlayer("ivan"));
             game.AddPlayer(new AiPlayer("james"));
-            InitialMoney(50,1);
+            InitialMoney(100,100);
                 ////////
 
                 while (!GameIsOver)
