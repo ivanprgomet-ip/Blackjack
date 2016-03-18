@@ -18,7 +18,7 @@ namespace ConsoleGui
             game.AddPlayer(new AiPlayer("dalius"));
             game.AddPlayer(new AiPlayer("james"));
 
-            InitialMoney(100,250);
+            InitialMoney(5,250);
 
             while (!isNewGame)
             {
@@ -71,17 +71,28 @@ namespace ConsoleGui
             game.RemovePlayer(game.dealer);
         }
         ////////////////////////////////////////////////
-        private string RtrnBet(IPlayer player)
+        private void PrintBetMsg(IPlayer player)
         {
-            return string.Format(game.PlaceBet(player));
+            var betIsValid = game.ValidBet(player);
+            var pName = player.Name;
+
+            while (!betIsValid)
+            {
+                Console.WriteLine(($"{pName}: BALANCE<BET"));
+                betIsValid = game.ValidBet(player);
+
+                if (betIsValid)
+                    break;
+            }
+            Console.WriteLine($"{pName} bet {Bank.GetPlayerBet(player.Id)}");
         }
         private void PrintBets()
         {
             foreach (IPlayer player in game.players)
             {
-                Console.WriteLine(RtrnBet(player));
+                PrintBetMsg(player);
             }
-            Console.WriteLine(RtrnBet(game.dealer));
+            PrintBetMsg(game.dealer);
         }
         ////////////////////////////////////////////////
         private string RtrnBust(IPlayer player)

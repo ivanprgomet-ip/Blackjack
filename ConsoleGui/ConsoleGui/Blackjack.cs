@@ -91,22 +91,30 @@ namespace ConsoleGui
             deck = new Deck();
             deck.Shuffle();
         }//do this in the deck class?
-        public string PlaceBet(IPlayer player)
+        public bool ValidBet(IPlayer player)
         {
-            int bet = player.MakeBet();//returns int betwen 1-10 (validation control keeps human players in check | logic keeps computer players in check)
-            BetValidity validity = bank.CheckBet(player, bet);//return valid if bet is lower than or equal to current balance
-            
-            switch(validity)
+            int betToTry = player.TryBet();//returns int betwen 1-10 (validation control keeps human players in check | logic keeps computer players in check)
+            bool isValid = bank.ValidateBet(player, betToTry);//validates by checking balance
+
+            if (isValid)
             {
-                case BetValidity.BalanceTooLow:
-                    //TODO prompt player to do bet again
-                    return string.Format($"{player.Name}: bet higher than current balance");
-                case BetValidity.BetValid:
-                    bank.AddBet(player.Id, bet);// At this point bet is valid and has ben added to bank and amount removed from balance
-                    return string.Format($"{player.Name} bet {bet}$ ");
-                default:
-                    return string.Format($"{player.Name}: something went wrong");
-            }            
+                bank.AddBet(player.Id, betToTry);//bet went through
+                return true;
+            }
+            else
+                return false;//bet failed due to inconsistent balance amount for bet
+
+            //switch(isValid)
+            //{
+            //    case BetValidity.BalanceTooLow:
+            //        //TODO prompt player to do bet again
+            //        return string.Format($"{player.Name}: bet higher than current balance");
+            //    case BetValidity.BetValid:
+            //        bank.AddBet(player.Id, bet);// At this point bet is valid and has ben added to bank and amount removed from balance
+            //        return string.Format($"{player.Name} bet {bet}$ ");
+            //    default:
+            //        return string.Format($"{player.Name}: something went wrong");
+            //}            
         }
         public void ClearBets()
         {

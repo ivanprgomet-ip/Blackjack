@@ -6,13 +6,7 @@ using System.Threading.Tasks;
 
 namespace ConsoleGui
 {
-    public enum BetValidity
-    {
-        OutOfCash,
-        BalanceTooLow,
-        Invalid,
-        BetValid
-    }
+
 
     public class Bank
     {
@@ -29,13 +23,12 @@ namespace ConsoleGui
             _bets.Add(id, bet);
             _balance[id] -= bet;
         }
-        public BetValidity CheckBet(IPlayer player, int bet)
+        public bool ValidateBet(IPlayer player, int bet)
         {
-            //TODO remember that all enums in BetValidity are not used..
             if (_balance[player.Id] < bet)
-                return BetValidity.BalanceTooLow;
+                return false;
             else
-                return BetValidity.BetValid;
+                return true;
         }
         public void AddMoneyToPlayer(Guid id, int money)
         {
