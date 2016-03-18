@@ -6,8 +6,6 @@ using System.Threading.Tasks;
 
 namespace ConsoleGui
 {
-
-
     public class Bank
     {
         private static Dictionary<Guid, int> _bets;
@@ -46,6 +44,7 @@ namespace ConsoleGui
         {
             _bets.Clear();
         }
+
         public static int GetPlayerBet(Guid id) => _bets[id];
         public static int GetPlayerMoney(Guid id) => _balance[id];
 

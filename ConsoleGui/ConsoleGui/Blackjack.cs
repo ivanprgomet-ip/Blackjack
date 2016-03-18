@@ -126,6 +126,41 @@ namespace ConsoleGui
             return string.Format($"({Rules.GethandValue(player.Hand)})");
         }
         ////////////////////////////////////////////////////////////////////
+        
+        private bool isBankrupt(IPlayer player)
+        {
+            //checks if player balance is 0
+            if (Bank.GetPlayerMoney(player.Id) == 0)
+                return true;
+            else
+                return false;
+        }
+        public List<IPlayer> ReturnBankrupt()
+        {
+            List<IPlayer> bankruptPlayers = new List<IPlayer>();
+
+            foreach (IPlayer player in players)
+            {
+                if (isBankrupt(player))
+                {
+                    bankruptPlayers.Add(player);
+                    //RemovePlayer(player);
+                }
+            }
+            return bankruptPlayers;
+        }
+        //public void RemoveBankrupt()
+        //{
+        //    List<IPlayer> bankruptPlayers = ReturnBankrupt();//returns a list of bankrupt players by checking each and every players balance
+            
+        //    foreach(IPlayer player in bankruptPlayers)
+        //    {
+        //        players.Remove(player);
+        //    }
+        //}
+
+        ////////////////////////////////////////////////////////////////////
+
         //public string EvaluateWinner(IPlayer player, AiDealer dealer)
         //{
         //    //TODO transform into switch statements instead

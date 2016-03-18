@@ -24,10 +24,11 @@ namespace ConsoleGui
             {
                 NewRound();
                 PrintBalances();
+
                 ValidateBets();
                 PrintBets();
 
-                Console.WriteLine("press any button to deal cards");
+                Console.WriteLine(">> press any button to deal cards <<");
                 Console.ReadKey();
                 Console.Clear();
 
@@ -43,7 +44,6 @@ namespace ConsoleGui
                 Console.Clear();
             }
         }
-
         private void InitialMoney(int playersMoney,int dealerMoney)
         {
             foreach (IPlayer player in game.players)
@@ -53,8 +53,22 @@ namespace ConsoleGui
             game.AddMoney(game.dealer, dealerMoney);
         }
 
+        private void RemoveBankruptPlayers()
+        {
+            //game.returnbankrupt() returns a list (of bankrupt players)
+            //by checking each and every players current balance
+            List<IPlayer> bankruptPlayers = game.ReturnBankrupt();
+
+            foreach (IPlayer player in bankruptPlayers)
+            {
+                game.players.Remove(player);
+                Console.WriteLine($"{player.Name} left");
+            }
+        }
         private void NewRound()
         {
+            RemoveBankruptPlayers();//remove broke playrs
+
             game.ClearBets();
             foreach(IPlayer player in game.players)
             {
@@ -79,7 +93,9 @@ namespace ConsoleGui
 
             while (!betIsValid)
             {
+                Console.BackgroundColor = ConsoleColor.DarkRed;
                 Console.WriteLine(($"{pName}: Balance lower then bet amount!"));
+                Console.ResetColor();
                 betIsValid = game.ValidateBet(player);
 
                 if (betIsValid)
@@ -99,21 +115,23 @@ namespace ConsoleGui
             Console.WriteLine();
         }
 
+        private void PrintBet(IPlayer player)
+        {
+            var pBet = Bank.GetPlayerBet(player.Id);
+            var pName = player.Name;
+            Console.WriteLine($"{pName} bet {pBet}$");
+        }
         private void PrintBets()
         {
             foreach (IPlayer player in game.players)
             {
-                var pBet = Bank.GetPlayerBet(player.Id);
-                var pName = player.Name;
-                Console.WriteLine($"{pName} bet {pBet}$");
+                PrintBet(player);
             }
-            var dBet = Bank.GetPlayerBet(game.dealer.Id);
-            var dName = game.dealer.Name;
-            Console.WriteLine($"{dName} bet {dBet}$");
+            PrintBet(game.dealer);
             Console.WriteLine();
         }
         ////////////////////////////////////////////////
-        private string RtrnBust(IPlayer player)
+        private string RtrnIfBust(IPlayer player)
         {
             return Rules.isBust(player.Hand) ? "BUST" : "";
         }
@@ -126,28 +144,27 @@ namespace ConsoleGui
             Console.ForegroundColor = ConsoleColor.Cyan;
             foreach(IPlayer player in game.players)
             {
-                Console.Write(RtrnHand(player)+" "+RtrnBust(player));
+                Console.Write(RtrnHand(player)+" "+RtrnIfBust(player));
                 Console.WriteLine();
             }
-            Console.Write(RtrnHand(game.dealer) + " " + RtrnBust(game.dealer));
+            Console.Write(RtrnHand(game.dealer) + " " + RtrnIfBust(game.dealer));
             Console.WriteLine();
             Console.ResetColor();
         }
         ////////////////////////////////////////////////
-        private string RtrnBalance(IPlayer player)
+        private void PrintBalance(IPlayer player)
         {
-            return Bank.GetPlayerMoney(player.Id).ToString();
+            var PBalance = Bank.GetPlayerMoney(player.Id);
+            Console.Write($"{player.Name}: {PBalance}$ | ");
         }
         private void PrintBalances()
         {
-            Console.BackgroundColor = ConsoleColor.DarkBlue;
+            Console.BackgroundColor = ConsoleColor.DarkGreen;
             foreach(IPlayer player in game.players)
             {
-                var PBalance= Bank.GetPlayerMoney(player.Id);
-                Console.Write($"{player.Name}: {PBalance}$ | ");
+                PrintBalance(player);
             }
-            var DBalance = Bank.GetPlayerMoney(game.dealer.Id);
-            Console.Write($"{game.dealer.Name}: {DBalance}$ ");
+            PrintBalance(game.dealer);
             Console.WriteLine();
             Console.ResetColor();
         }
