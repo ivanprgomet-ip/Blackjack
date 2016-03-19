@@ -15,11 +15,10 @@ namespace ConsoleGui
             Cards = new List<Card>();
         }
 
-        public void AddCardToHand(Card card)
+        public void AddCard(Card card)
         {
             Cards.Add(card);
         }
-
         public void Clear()
         {
             Cards.Clear();

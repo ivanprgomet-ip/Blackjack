@@ -6,11 +6,7 @@ using System.Threading.Tasks;
 
 namespace ConsoleGui
 {
-    public enum PlayerDecision
-    {
-        Hit,
-        Stay
-    }
+
 
     /// <summary>
     /// external API to handle a game of blackjack.

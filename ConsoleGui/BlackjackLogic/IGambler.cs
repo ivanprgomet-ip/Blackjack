@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 
 namespace ConsoleGui
 {
-    public interface IPlayer
+    /// <summary>
+    /// Interface implemented by HumanPlayers and 
+    /// AiPlayers for making bets.
+    /// </summary>
+    public interface IGambler
     {
-        Guid Id { get; }
-        Hand Hand { get; }
-        string Name { get; }
         int MakeBet();
-        PlayerDecision MakeDecision(Hand hand);
+        int Bet { get;}
     }
 }

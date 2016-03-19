@@ -6,37 +6,18 @@ using System.Threading.Tasks;
 
 namespace ConsoleGui
 {
-    public class AiDealer : IPlayer
+    public class AiDealer : Player
     {
-        public Guid Id { get; }
-        public Hand Hand { get; }
-        public string Name { get; }
-        public AiDealer(string name="dealer")
+        public AiDealer(string name):base(name="Dealer")
         {
-            Name = name;
-            Id = Guid.NewGuid();
-            Hand = new Hand();
+            //TODO: see if code above is legit
         }
 
-        public PlayerDecision MakeDecision(Hand hand)
+        public override PlayerDecision MakeDecision()
         {
-            if(Rules.GethandValue(Hand) >= 17)
+            if(Rules.GethandValue(_Hand) >= 17)
                 return PlayerDecision.Stay;
             return PlayerDecision.Hit;
-        }
-        public int MakeBet()
-        {
-            var cash = Bank.GetPlayerMoney(Id);
-
-            if (cash <= 5)
-                return 1;//ai will only bet 1$ until bankrupt 
-            if (cash <= 20)
-                return 5;
-            if (cash <= 50)
-                return 7;
-            if (cash <= 100)
-                return 10;
-            return 10;
         }
     }
 }

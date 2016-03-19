@@ -21,32 +21,30 @@ namespace ConsoleGui
     /// consolegui project, the class does not need to 
     /// be public, and can therefore be internal insted.
     /// </summary>
-    class HumanPlayer : IPlayer
+    class HumanPlayer :Player,IGambler
     {
-        public Guid Id { get; }
-        public Hand Hand { get; }
-        public string Name { get;}
+        public int Bet { get; private set; }
 
-        public HumanPlayer(string name)
+        public HumanPlayer(string name):base(name)
         {
-            Name = name;
-            Id = Guid.NewGuid();
-            Hand = new Hand();
+
         }
-        public PlayerDecision MakeDecision(Hand hand)
+
+        public override PlayerDecision MakeDecision()
         {
-            if (Rules.GethandValue(Hand) >= 21)
+            if (Rules.GethandValue(_Hand) >= 21)
                 return PlayerDecision.Stay;
             
             Console.Write($"{Name}: hit/stay (h/s)? >> ");
             var choice = Console.ReadLine();
             return choice == "h" ? PlayerDecision.Hit : PlayerDecision.Stay;
         }
-        
         public int MakeBet()
         {
-            //Betting process for human players.
-            //will only return bets between 1 and 10.
+            /*
+            Betting process for a human player.
+            Will only return bets between 1 and 10.
+            */
             var invalidBet = true;
             var bet = 0;
 
