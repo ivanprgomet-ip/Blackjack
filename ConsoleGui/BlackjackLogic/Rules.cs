@@ -15,12 +15,12 @@ namespace ConsoleGui
 
     public class Rules
     {
-        public static bool isBust(Hand pHand)
+        public bool isBust(Hand pHand)
         {
             int handValue = GethandValue(pHand);
             return handValue > 21 ? true : false;
         }
-        public static Winninghand EvaluateWinner(Hand player, Hand dealer)
+        public Winninghand EvaluateWinner(Hand player, Hand dealer)
         {
             int dHandValue = GethandValue(dealer);
             int pHandValue = GethandValue(player);
@@ -51,7 +51,7 @@ namespace ConsoleGui
                 }
             }
         }
-        public static int GethandValue(Hand hand)
+        public int GethandValue(Hand hand)
         {
             var sum = 0;
             foreach (var card in hand.Cards)

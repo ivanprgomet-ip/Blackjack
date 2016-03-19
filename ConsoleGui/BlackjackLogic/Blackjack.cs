@@ -17,125 +17,127 @@ namespace ConsoleGui
     /// </summary>
     public class Blackjack
     {
-        public AiDealer dealer = new AiDealer();
-        public List<IPlayer> players = new List<IPlayer>();
+        private Rules rules = new Rules();
+        public AiDealer dealer = new AiDealer("dealer");
+        public List<IGambler> players = new List<IGambler>();
 
-        Bank bank = new Bank();
         Deck deck;
 
-        public Blackjack()
-        {
-
-        }
-
-        public void AddPlayer(IPlayer player)
+       
+        public void AddPlayer(IGambler player)
         {
             players.Add(player);
         }
-        public void RemovePlayer(IPlayer player)
+        public void RemovePlayer(IGambler player)
         {
-            bank.RemoveBetAndBalance(player.Id);
             players.Remove(player);    
         }
         public void FirstDeal()
         {
             for (int i = 0; i < 2; i++)
             {
-                foreach (IPlayer player in players)
+                foreach (Player player in players)
                 {
                     DealCardTo(player);
                 }
                 DealCardTo(dealer);
             }
         }
-        public void DealCardTo(IPlayer player)
+        public void DealCardTo(Player player)
         {
             player.Hand.AddCardToHand(deck.ReturnCard());
         }
-        public PlayerDecision ReturnDecision(IPlayer player)
+        public PlayerDecision ReturnDecision(Player player)
         {
             return player.MakeDecision(player.Hand);
         }
-        public void AddMoney(IPlayer player,int playerMoney)
+        public void AddMoney(Player player,int amount)
         {
-            bank.AddMoneyToPlayer(player.Id, playerMoney);
+            player.Balance += amount;
         }
-        public void RemoveMoney(IPlayer player, int playerMoney)
+        public void RemoveMoney(Player player, int amount)
         {
-            bank.RemoveMoneyFromPlayer(player.Id, playerMoney);
+            player.Balance -= amount;
         }
 
-        public void ResetDeck()
+        public void InitializeDeck()
         {
             deck = new Deck();
             deck.Shuffle();
         }
-        public bool ValidateBet(IPlayer player)
+        public bool ValidateBet(IGambler player)
         {
-            int betToTry = player.MakeBet();//returns int betwen 1-10 (validation control keeps human players in check | logic keeps computer players in check)
-            bool betIsValid = bank.ValidateBet(player, betToTry);//validates by checking balance
+            //TODO rules class should be the validator of bets
+            int betToTry = player.MakeBet();
+            bool betIsValid = bank.ValidateBet(player, betToTry);
 
             if (betIsValid)
             {
-                bank.AddBet(player.Id, betToTry);//bet went through to the bank
+                player.Bet = betToTry;
                 return true;
             }
             else
-                return false;//bet failed and never got to the bank
+                return false;
         }
 
         public void ClearBets()
         {
-            bank.ClearBets();
+            foreach(IGambler player in players)
+            {
+                player.Bet = 0;
+            }
         }
-        public string GetHand(IPlayer player)
+        public string GetHand(Player player)
         {
-            string playerHand = string.Empty;
+            //TODO decide where to have this method (in Hand?)
+            string pHand = string.Empty;
             foreach (Card c in player.Hand.Cards)
             {
-                playerHand += c.ToString() + " ";
+                pHand += c.ToString() + " ";
             }
             //also adds the players current total score next to handvalue
-            playerHand += GetHandValue(player);
-            return playerHand;
+            pHand += GetHandValue(player);
+            return pHand;
         }
-        private string GetHandValue(IPlayer player)
+        private string GetHandValue(Player player)
         {
-            return string.Format($"({Rules.GethandValue(player.Hand)})");
+            return string.Format($"({rules.GethandValue(player.Hand)})");
         }
-        private bool isBankrupt(IPlayer player)
+        private bool isBankrupt(Player player)
         {
-            //checks if player balance is 0
-            if (Bank.GetPlayerMoney(player.Id) == 0)
+            if (player.Balance==0)
                 return true;
             else
                 return false;
         }
-        public List<IPlayer> ReturnBankrupt()
+        public List<Player> ReturnBankrupt()
         {
-            List<IPlayer> bankruptPlayers = new List<IPlayer>();
+            //TODO decide if this method is needed in here? maybe GUI class?
+            /*The List "bankruptPlayers" holds the general Player type, 
+            which means it is able to store both regular players and dealers*/
+            List<Player> bankruptPlayers = new List<Player>();
 
-            foreach (IPlayer player in players)
+            foreach (Player player in players)
             {
                 if (isBankrupt(player))
-                {
                     bankruptPlayers.Add(player);
-                }
             }
+
+            //TODO maybe check dealers balance some other way?
             if (isBankrupt(dealer))
                 bankruptPlayers.Add(dealer);
 
             return bankruptPlayers;
         }     
-        public Winninghand ReturnWinner(IPlayer player, AiDealer dealer)
+        public Winninghand ReturnWinner(Player player, AiDealer dealer)
         {
-            //returns winner: a player OR the dealer:
-            Winninghand winner = Rules.EvaluateWinner(player.Hand, dealer.Hand);
+            //returns winner: a player OR dealer:
+            Winninghand winner =  rules.EvaluateWinner(player.Hand, dealer.Hand);
             return winner;
         }
-        public bool CheckGameOver()
+        public bool isBankrupt2()
         {
-            var DealerCash = Bank.GetPlayerMoney(dealer.Id);
+            var DealerCash = dealer.Balance;
             if (DealerCash <= 0)
                 return true;
             else
@@ -143,16 +145,17 @@ namespace ConsoleGui
         }
         public void NewGame()
         {
-            List<IPlayer> ToBeRemoved = new List<IPlayer>();
+            List<Player> ToBeCleared = new List<Player>();
 
-            foreach (IPlayer player in players)
+            foreach (Player player in players)
             {
-                ToBeRemoved.Add(player);
+                ToBeCleared.Add(player);
             }
-            ToBeRemoved.Add(dealer);
+            ToBeCleared.Add(dealer);
 
-            foreach(IPlayer player in ToBeRemoved)
+            foreach(Player player in ToBeCleared)
             {
+                //TODO solve this
                 RemovePlayer(player);
             }
 

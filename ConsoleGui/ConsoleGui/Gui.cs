@@ -54,7 +54,7 @@ namespace ConsoleGui
                     Console.ReadKey();
                     UpdateWinners();
 
-                    GameIsOver = game.CheckGameOver();
+                    GameIsOver = game.isBankrupt2();
                     if (GameIsOver)
                         break;
 
@@ -118,7 +118,7 @@ namespace ConsoleGui
                 player.Hand.Clear();
             }
             game.dealer.Hand.Clear();
-            game.ResetDeck();
+            game.InitializeDeck();
         }
         private string ValidateBet(IPlayer player)
         {
