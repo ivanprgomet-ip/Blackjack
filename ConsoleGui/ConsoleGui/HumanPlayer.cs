@@ -6,12 +6,26 @@ using System.Threading.Tasks;
 
 namespace ConsoleGui
 {
-    public class HumanPlayer : IPlayer
+    /// <summary>
+    /// humanplayer needs a graphical interface 
+    /// to function properly due to the need of
+    /// user input. the humanplayer implementation 
+    /// will look diferent depending on the type of
+    /// graphical interface. in this case it is 
+    /// adapted for the console window.
+    /// hint: lägg märke till that the other player 
+    /// types (aidelaer and aiplayer) must be public 
+    /// classes so that the gui class within the guiconsole
+    /// project can access the players hand properties.
+    /// due to humanplayer actually already beeing inside the 
+    /// consolegui project, the class does not need to 
+    /// be public, and can therefore be internal insted.
+    /// </summary>
+    class HumanPlayer : IPlayer
     {
         public Guid Id { get; }
         public Hand Hand { get; }
         public string Name { get;}
-
 
         public HumanPlayer(string name)
         {

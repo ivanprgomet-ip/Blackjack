@@ -24,7 +24,7 @@ namespace ConsoleGui
                 ////////
             game.AddPlayer(new HumanPlayer("ivan"));
             game.AddPlayer(new AiPlayer("james"));
-            InitialMoney(100,100);
+            InitialMoney(100,1);
                 ////////
 
                 while (!GameIsOver)
@@ -243,7 +243,8 @@ namespace ConsoleGui
                 if (currentWinner == Winninghand.Dealer)
                 {
                     game.AddMoney(game.dealer, pBet);//add bet $ to dealer winner
-                    game.RemoveMoney(player, pBet);//remove lost $ from loser
+                    //money does not need to be removed from losing player here
+                    //because it is already done in the betting stage of the round.
                     Console.WriteLine($"{game.dealer.Name} +{pBet}$ | {player.Name} -{pBet}$");
                 }
                 if (currentWinner == Winninghand.Player)
