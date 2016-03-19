@@ -10,8 +10,8 @@ namespace ConsoleGui
     {
         private Blackjack game = new Blackjack();
 
-        private bool pActive = true;
-        private bool GameIsOver;
+        private bool pActive = true;//true if someone is still active
+        private bool GameIsOver;//true if dealer is bankrupt = game is over
         private bool newGame = true;
 
         public void Run()
@@ -24,7 +24,7 @@ namespace ConsoleGui
                 ////////
             game.AddPlayer(new HumanPlayer("ivan"));
             game.AddPlayer(new AiPlayer("james"));
-            InitialMoney(100,1);
+            InitialMoney(100,100);
                 ////////
 
                 while (!GameIsOver)
@@ -43,7 +43,7 @@ namespace ConsoleGui
                     game.FirstDeal();
                     PrintHands();
 
-                    while (pActive)//someone is active
+                    while (pActive)
                     {
                         pActive = PlayersHitOrStay();
                         if (!pActive)
@@ -54,7 +54,7 @@ namespace ConsoleGui
                     Console.ReadKey();
                     UpdateWinners();
 
-                    GameIsOver = game.CheckGameOver();//if dealer is bankrupt, game is over
+                    GameIsOver = game.CheckGameOver();
                     if (GameIsOver)
                         break;
 
@@ -66,7 +66,10 @@ namespace ConsoleGui
                 Console.Clear();
             }
         }
-
+        public void PlayerSetup()
+        {
+            //todo
+        }
         private void StartNewGame()
         {
             Console.WriteLine(">>> GAME OVER <<<");
@@ -88,7 +91,6 @@ namespace ConsoleGui
             }
             game.AddMoney(game.dealer, dealerMoney);
         }
-        ////////////////////////////////////////////////
         private void RemoveBankruptPlayers()
         {
             //game.returnbankrupt() returns a list (of bankrupt players)
@@ -118,7 +120,6 @@ namespace ConsoleGui
             game.dealer.Hand.Clear();
             game.ResetDeck();
         }
-        ////////////////////////////////////////////////
         private string ValidateBet(IPlayer player)
         {
             var betIsValid = game.ValidateBet(player);
@@ -138,14 +139,17 @@ namespace ConsoleGui
         }
         private void ValidateBets()
         {
+            /*
+            The dealer never sets any bet. he only 
+            indirectly calls the other players individual
+            bets. 
+            */
             foreach (IPlayer player in game.players)
             {
                 ValidateBet(player);
             }
-            //ValidateBet(game.dealer);//TODO dealer does not bet, only calls separate bets
             Console.WriteLine();
         }
-
         private void PrintBet(IPlayer player)
         {
             var pBet = Bank.GetPlayerBet(player.Id);
@@ -161,7 +165,6 @@ namespace ConsoleGui
             //PrintBet(game.dealer);//TODO dealer does not bet, only calls separate bets
             Console.WriteLine();
         }
-        ////////////////////////////////////////////////
         private string RtrnIfBust(IPlayer player)
         {
             return Rules.isBust(player.Hand) ? "BUST" : "";
@@ -182,7 +185,6 @@ namespace ConsoleGui
             Console.WriteLine();
             Console.ResetColor();
         }
-        ////////////////////////////////////////////////
         private void PrintBalance(IPlayer player)
         {
             var PBalance = Bank.GetPlayerMoney(player.Id);
@@ -199,7 +201,6 @@ namespace ConsoleGui
             Console.WriteLine();
             Console.ResetColor();
         }
-        ////////////////////////////////////////////////
         private void HitOrStay(IPlayer player)
         {
             bool bustOrStay = false;
@@ -222,7 +223,6 @@ namespace ConsoleGui
                 }
             }
         }
-
         public bool PlayersHitOrStay()
         {
             foreach(IPlayer player in game.players)
@@ -232,7 +232,7 @@ namespace ConsoleGui
             HitOrStay(game.dealer);
             return false;//returns false to say there is no more active players
         }
-        private void UpdateWinners()//TODO winners not getting the other players bet atm
+        private void UpdateWinners()
         {
             foreach(IPlayer player in game.players)
             {
