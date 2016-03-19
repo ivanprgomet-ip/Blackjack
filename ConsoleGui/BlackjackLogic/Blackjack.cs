@@ -32,7 +32,6 @@ namespace ConsoleGui
 
         }
 
-        ////////////////////////////////////////////////////////////////////
         public void AddPlayer(IPlayer player)
         {
             players.Add(player);
@@ -42,7 +41,6 @@ namespace ConsoleGui
             bank.RemoveBetAndBalance(player.Id);
             players.Remove(player);    
         }
-        ////////////////////////////////////////////////////////////////////
         public void FirstDeal()
         {
             for (int i = 0; i < 2; i++)
@@ -58,12 +56,10 @@ namespace ConsoleGui
         {
             player.Hand.AddCardToHand(deck.ReturnCard());
         }
-        ////////////////////////////////////////////////////////////////////
         public PlayerDecision ReturnDecision(IPlayer player)
         {
             return player.MakeDecision(player.Hand);
         }
-        ////////////////////////////////////////////////////////////////////
         public void AddMoney(IPlayer player,int playerMoney)
         {
             bank.AddMoneyToPlayer(player.Id, playerMoney);
@@ -77,8 +73,7 @@ namespace ConsoleGui
         {
             deck = new Deck();
             deck.Shuffle();
-        }//do this in the deck class?
-        ////////////////////////////////////////////////////////////////////
+        }
         public bool ValidateBet(IPlayer player)
         {
             int betToTry = player.MakeBet();//returns int betwen 1-10 (validation control keeps human players in check | logic keeps computer players in check)
@@ -97,7 +92,6 @@ namespace ConsoleGui
         {
             bank.ClearBets();
         }
-        ////////////////////////////////////////////////////////////////////
         public string GetHand(IPlayer player)
         {
             string playerHand = string.Empty;
@@ -113,7 +107,6 @@ namespace ConsoleGui
         {
             return string.Format($"({Rules.GethandValue(player.Hand)})");
         }
-        ////////////////////////////////////////////////////////////////////
         private bool isBankrupt(IPlayer player)
         {
             //checks if player balance is 0
@@ -138,7 +131,6 @@ namespace ConsoleGui
 
             return bankruptPlayers;
         }     
-        ////////////////////////////////////////////////////////////////////
         public Winninghand ReturnWinner(IPlayer player, AiDealer dealer)
         {
             //returns winner: a player OR the dealer:
