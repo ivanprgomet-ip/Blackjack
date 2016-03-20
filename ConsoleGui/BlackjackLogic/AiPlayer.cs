@@ -8,8 +8,6 @@ namespace ConsoleGui
 {
     public class AiPlayer : RegularPlayer
     {
-        public int Bet { get; set; }
-
         public AiPlayer(string name):base(name)
         {
 

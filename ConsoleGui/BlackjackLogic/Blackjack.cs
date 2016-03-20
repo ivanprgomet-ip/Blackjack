@@ -42,11 +42,10 @@ namespace ConsoleGui
             }
             ToBeCleared.Add(dealer);
 
-            foreach(Player player in ToBeCleared)
+            for(int i=0;i<ToBeCleared.Count;i++)
             {
-                ToBeCleared.Remove(player);
+                ToBeCleared.Remove(ToBeCleared[i]);
             }
-
         }
         public void FirstDeal()
         {

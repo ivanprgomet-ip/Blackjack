@@ -8,8 +8,6 @@ namespace ConsoleGui
 {
     class HumanPlayer :RegularPlayer
     {
-        public int Bet { get; set; }
-
         public HumanPlayer(string name):base(name)
         {
 
