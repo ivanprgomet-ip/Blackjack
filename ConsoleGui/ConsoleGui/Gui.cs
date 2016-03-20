@@ -32,7 +32,7 @@ namespace ConsoleGui
                     NewRound();
                     PrintBalances();
 
-                    ValidateBets();
+                    MakeBets();
                     PrintBets();
 
                     Console.WriteLine(">> press any button to deal cards <<");
@@ -93,13 +93,11 @@ namespace ConsoleGui
         }
         private void RemoveBankruptPlayers()
         {
-            //game.returnbankrupt() returns a list (of bankrupt players)
-            //by checking each and every players current balance
-            List<IPlayer> bankruptPlayers = game.ReturnBankrupt();
+            List<Player> bankruptPlayers = game.ReturnBankrupt();
 
-            foreach (IPlayer player in bankruptPlayers)
+            foreach (Player player in bankruptPlayers)
             {
-                game.players.Remove(player);
+                bankruptPlayers.Remove(player);
                 Console.WriteLine($"{player.Name} left");
                 Console.ReadKey();
                 Console.Clear();
@@ -107,22 +105,18 @@ namespace ConsoleGui
         }
         private void NewRound()
         {
-            
-
-            pActive = true;//resetting pActive variable
-            RemoveBankruptPlayers();//remove bankrupt players before every round
+            pActive = true;//resetting general player active variable
+            RemoveBankruptPlayers();//extract and remove bankrupt players before every round
 
             game.ClearBets();
-            foreach(IPlayer player in game.players)
-            {
-                player.Hand.Clear();
-            }
-            game.dealer.Hand.Clear();
-            game.InitializeDeck();
+            game.ClearHands();
+            
+            game.InitializeDeck();//52cards refreshed and shuffled
         }
-        private string ValidateBet(IPlayer player)
+
+        private string ValidateBet(RegularPlayer player)
         {
-            var betIsValid = game.ValidateBet(player);
+            var betIsValid = game.BetIsValid(player);
             var pName = player.Name;
 
             while (!betIsValid)
@@ -130,53 +124,46 @@ namespace ConsoleGui
                 Console.BackgroundColor = ConsoleColor.DarkRed;
                 Console.WriteLine(($"{pName}: Balance lower then bet amount!"));
                 Console.ResetColor();
-                betIsValid = game.ValidateBet(player);
+                betIsValid = game.BetIsValid(player);//player re-enters bet
 
                 if (betIsValid)
                     break;
             }
-            return ($"{pName} bet {Bank.GetPlayerBet(player.Id)}$");
+            return ($"{pName} bet {player.Bet}$");
         }
-        private void ValidateBets()
+        private void MakeBets()
         {
-            /*
-            The dealer never sets any bet. he only 
-            indirectly calls the other players individual
-            bets. 
-            */
-            foreach (IPlayer player in game.players)
+            foreach (RegularPlayer player in game.players)
             {
                 ValidateBet(player);
             }
             Console.WriteLine();
         }
-        private void PrintBet(IPlayer player)
+        private void PrintBet(RegularPlayer player)
         {
-            var pBet = Bank.GetPlayerBet(player.Id);
-            var pName = player.Name;
-            Console.WriteLine($"{pName} bet {pBet}$");
+            Console.WriteLine($"{player.Name} bet {player.Bet}$");
         }
         private void PrintBets()
         {
-            foreach (IPlayer player in game.players)
+            foreach (RegularPlayer player in game.players)
             {
                 PrintBet(player);
             }
-            //PrintBet(game.dealer);//TODO dealer does not bet, only calls separate bets
             Console.WriteLine();
         }
-        private string RtrnIfBust(IPlayer player)
+
+        private string RtrnIfBust(Player player)
         {
-            return Rules.isBust(player.Hand) ? "BUST" : "";
+            return Rules.isBust(player._Hand) ? "BUST" : "";
         }
-        private string RtrnHand(IPlayer player)
+        private string RtrnHand(Player player)
         {
             return string.Format(($"{player.Name}: {game.GetHand(player)}"));
         }
         private void PrintHands()
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
-            foreach(IPlayer player in game.players)
+            foreach(RegularPlayer player in game.players)
             {
                 Console.Write(RtrnHand(player)+" "+RtrnIfBust(player));
                 Console.WriteLine();
@@ -185,15 +172,14 @@ namespace ConsoleGui
             Console.WriteLine();
             Console.ResetColor();
         }
-        private void PrintBalance(IPlayer player)
+        private void PrintBalance(Player player)
         {
-            var PBalance = Bank.GetPlayerMoney(player.Id);
-            Console.Write($"{player.Name}: {PBalance}$ | ");
+            Console.Write($"{player.Name}: {player.Balance}$ | ");
         }
         private void PrintBalances()
         { 
             Console.BackgroundColor = ConsoleColor.DarkGreen;
-            foreach (IPlayer player in game.players)
+            foreach (RegularPlayer player in game.players)
             {
                 PrintBalance(player);
             }
@@ -201,12 +187,12 @@ namespace ConsoleGui
             Console.WriteLine();
             Console.ResetColor();
         }
-        private void HitOrStay(IPlayer player)
+        private void HitOrStay(Player player)
         {
             bool bustOrStay = false;
             while (!bustOrStay)
             {
-                if (Rules.GethandValue(player.Hand) > 21)
+                if (Rules.GethandValue(player._Hand) > 21)
                     bustOrStay = true;
                 else
                 {
@@ -225,7 +211,7 @@ namespace ConsoleGui
         }
         public bool PlayersHitOrStay()
         {
-            foreach(IPlayer player in game.players)
+            foreach(RegularPlayer player in game.players)
             {
                 HitOrStay(player);
             }
@@ -234,9 +220,12 @@ namespace ConsoleGui
         }
         private void UpdateWinners()
         {
-            foreach(IPlayer player in game.players)
+            //all regular players evaluated against dealer
+            foreach(RegularPlayer player in game.players)
             {
-                int pBet = Bank.GetPlayerBet(player.Id);
+                int pBet = player.Bet;
+                string pName = player.Name;
+                string dName = game.dealer.Name;
                 Winninghand currentWinner = game.ReturnWinner(player, game.dealer);
                 Console.ForegroundColor = ConsoleColor.Yellow;
 
@@ -245,18 +234,18 @@ namespace ConsoleGui
                     game.AddMoney(game.dealer, pBet);//add bet $ to dealer winner
                     //money does not need to be removed from losing player here
                     //because it is already done in the betting stage of the round.
-                    Console.WriteLine($"{game.dealer.Name} +{pBet}$ | {player.Name} -{pBet}$");
+                    Console.WriteLine($"{dName} +{pBet}$ | {pName} -{pBet}$");
                 }
                 if (currentWinner == Winninghand.Player)
                 {
                     game.AddMoney(player, pBet * 2);//add bet*2 $ to player winner
                     game.RemoveMoney(game.dealer, pBet);//remove lost $ from loser
-                    Console.WriteLine($"{game.dealer.Name} -{pBet}$ | {player.Name} +{pBet}$");
+                    Console.WriteLine($"{dName} -{pBet}$ | {pName} +{pBet}$");
                 }
                 if (currentWinner == Winninghand.Draw)
                 {
                     game.AddMoney(player, pBet);//player reclaim bet $
-                    Console.WriteLine($"Draw between {game.dealer.Name} and {player.Name} ({pBet}$ returned)");
+                    Console.WriteLine($"Draw between {dName} and {pName} ({pBet}$ returned)");
                 }
                 Console.ResetColor();
             }

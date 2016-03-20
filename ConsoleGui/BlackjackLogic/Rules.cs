@@ -15,7 +15,7 @@ namespace ConsoleGui
 
     public class Rules
     {
-        public bool isBust(Hand pHand)
+        public static bool isBust(Hand pHand)
         {
             int handValue = GethandValue(pHand);
             return handValue > 21 ? true : false;

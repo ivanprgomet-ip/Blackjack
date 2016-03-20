@@ -103,7 +103,19 @@ namespace ConsoleGui
                 return false;
         }
 
-        public void ClearBet(RegularPlayer player)
+        private void ClearHand(Player player)
+        {
+            player._Hand.Clear();
+        }
+        public void ClearHands()
+        {
+            foreach (RegularPlayer player in players)
+            {
+                player._Hand.Clear();
+            }
+            dealer._Hand.Clear();
+        }
+        private void ClearBet(RegularPlayer player)
         {
             player.Bet = 0;
         }
