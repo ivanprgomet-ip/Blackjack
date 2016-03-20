@@ -85,7 +85,7 @@ namespace ConsoleGui
 
         private void InitialMoney(int playersMoney,int dealerMoney)
         {
-            foreach (IPlayer player in game.players)
+            foreach (RegularPlayer player in game.players)
             {
                 game.AddMoney(player, playersMoney);
             }

@@ -14,9 +14,9 @@ namespace ConsoleGui
     public abstract class Player
     {
         //protected internal: makes _Hand accessible in Blackjack class and for HumanPlayer which is in another assembly
-        protected internal Hand _Hand { get; }
+        public Hand _Hand { get; }
         public string Name { get; }
-        internal int Balance { get; set; }
+        public int Balance { get; set; }
 
         public Player(string name)
         {
