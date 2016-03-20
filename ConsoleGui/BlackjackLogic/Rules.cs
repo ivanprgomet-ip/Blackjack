@@ -20,7 +20,7 @@ namespace ConsoleGui
             int handValue = GethandValue(pHand);
             return handValue > 21 ? true : false;
         }
-        public Winninghand EvaluateWinner(Hand player, Hand dealer)
+        public static Winninghand EvaluateWinner(Hand player, Hand dealer)
         {
             int dHandValue = GethandValue(dealer);
             int pHandValue = GethandValue(player);
@@ -51,7 +51,7 @@ namespace ConsoleGui
                 }
             }
         }
-        public int GethandValue(Hand hand)
+        public static int GethandValue(Hand hand)
         {
             var sum = 0;
             foreach (var card in hand.Cards)

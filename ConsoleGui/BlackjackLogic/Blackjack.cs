@@ -17,8 +17,7 @@ namespace ConsoleGui
     /// </summary>
     public class Blackjack
     {
-        private Rules rules = new Rules();
-        public AiDealer dealer = new AiDealer("dealer");
+        public AiDealer dealer = new AiDealer("Dealer");
         public List<IGambler> players = new List<IGambler>();
 
         Deck deck;
@@ -31,6 +30,23 @@ namespace ConsoleGui
         public void RemovePlayer(IGambler player)
         {
             players.Remove(player);    
+        }
+        public void NewGame()
+        {
+            List<Player> ToBeCleared = new List<Player>();
+
+            foreach (Player player in players)
+            {
+                ToBeCleared.Add(player);
+            }
+            ToBeCleared.Add(dealer);
+
+            foreach(Player player in ToBeCleared)
+            {
+                //TODO solve this
+                RemovePlayer(player);
+            }
+
         }
         public void FirstDeal()
         {
@@ -45,11 +61,11 @@ namespace ConsoleGui
         }
         public void DealCardTo(Player player)
         {
-            player.Hand.AddCardToHand(deck.ReturnCard());
+            player._Hand.AddCard(deck.ReturnCard());
         }
         public PlayerDecision ReturnDecision(Player player)
         {
-            return player.MakeDecision(player.Hand);
+            return player.MakeDecision();
         }
         public void AddMoney(Player player,int amount)
         {
@@ -91,7 +107,7 @@ namespace ConsoleGui
         {
             //TODO decide where to have this method (in Hand?)
             string pHand = string.Empty;
-            foreach (Card c in player.Hand.Cards)
+            foreach (Card c in player._Hand.Cards)
             {
                 pHand += c.ToString() + " ";
             }
@@ -101,7 +117,7 @@ namespace ConsoleGui
         }
         private string GetHandValue(Player player)
         {
-            return string.Format($"({rules.GethandValue(player.Hand)})");
+            return string.Format($"({Rules.GethandValue(player._Hand)})");
         }
         private bool isBankrupt(Player player)
         {
@@ -132,7 +148,7 @@ namespace ConsoleGui
         public Winninghand ReturnWinner(Player player, AiDealer dealer)
         {
             //returns winner: a player OR dealer:
-            Winninghand winner =  rules.EvaluateWinner(player.Hand, dealer.Hand);
+            Winninghand winner =  Rules.EvaluateWinner(player._Hand, dealer._Hand);
             return winner;
         }
         public bool isBankrupt2()
@@ -142,23 +158,6 @@ namespace ConsoleGui
                 return true;
             else
                 return false;
-        }
-        public void NewGame()
-        {
-            List<Player> ToBeCleared = new List<Player>();
-
-            foreach (Player player in players)
-            {
-                ToBeCleared.Add(player);
-            }
-            ToBeCleared.Add(dealer);
-
-            foreach(Player player in ToBeCleared)
-            {
-                //TODO solve this
-                RemovePlayer(player);
-            }
-
         }
     }
 }
