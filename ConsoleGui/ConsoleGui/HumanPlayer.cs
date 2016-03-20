@@ -6,22 +6,7 @@ using System.Threading.Tasks;
 
 namespace ConsoleGui
 {
-    /// <summary>
-    /// humanplayer needs a graphical interface 
-    /// to function properly due to the need of
-    /// user input. the humanplayer implementation 
-    /// will look diferent depending on the type of
-    /// graphical interface. in this case it is 
-    /// adapted for the console window.
-    /// hint: lägg märke till that the other player 
-    /// types (aidelaer and aiplayer) must be public 
-    /// classes so that the gui class within the guiconsole
-    /// project can access the players hand properties.
-    /// due to humanplayer actually already beeing inside the 
-    /// consolegui project, the class does not need to 
-    /// be public, and can therefore be internal insted.
-    /// </summary>
-    class HumanPlayer :Player,IGambler
+    class HumanPlayer :RegularPlayer
     {
         public int Bet { get; set; }
 
@@ -39,7 +24,7 @@ namespace ConsoleGui
             var choice = Console.ReadLine();
             return choice == "h" ? PlayerDecision.Hit : PlayerDecision.Stay;
         }
-        public int MakeBet()
+        public override int MakeBet()
         {
             /*
             Betting process for a human player.

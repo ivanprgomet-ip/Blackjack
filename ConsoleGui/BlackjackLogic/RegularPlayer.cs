@@ -6,13 +6,9 @@ using System.Threading.Tasks;
 
 namespace ConsoleGui
 {
-    /// <summary>
-    /// Interface implemented by HumanPlayers and 
-    /// AiPlayers for making bets.
-    /// </summary>
-    public interface IGambler
+    public abstract class RegularPlayer:Player
     {
-        int MakeBet();
         int Bet { get; set; }
+        public abstract int MakeBet();
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ConsoleGui
 {
-    public class AiPlayer : Player,IGambler
+    public class AiPlayer : RegularPlayer
     {
         public int Bet { get; set; }
 
@@ -34,8 +34,7 @@ namespace ConsoleGui
                     return PlayerDecision.Hit;
             }
         }
-
-        public int MakeBet()
+        public override int MakeBet()
         {
             if (Balance <= 5)
                 return 1;

@@ -27,6 +27,7 @@ namespace ConsoleGui
         {
             _Hand = new Hand();
         }
+
         public abstract PlayerDecision MakeDecision();
     }
 }
