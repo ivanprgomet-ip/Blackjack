@@ -13,6 +13,6 @@ namespace ConsoleGui
     public interface IGambler
     {
         int MakeBet();
-        int Bet { get;}
+        int Bet { get; set; }
     }
 }

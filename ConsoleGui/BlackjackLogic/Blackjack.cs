@@ -29,6 +29,7 @@ namespace ConsoleGui
         }
         public void RemovePlayer(IGambler player)
         {
+            //AiDealer not removable with this method
             players.Remove(player);    
         }
         public void NewGame()
@@ -43,8 +44,7 @@ namespace ConsoleGui
 
             foreach(Player player in ToBeCleared)
             {
-                //TODO solve this
-                RemovePlayer(player);
+                ToBeCleared.Remove(player);
             }
 
         }
@@ -81,11 +81,18 @@ namespace ConsoleGui
             deck = new Deck();
             deck.Shuffle();
         }
-        public bool ValidateBet(IGambler player)
+        private bool ValidateBet(IGambler player, int bet)
+        {
+            if (player.Balance < bet)
+                return false;
+            else
+                return true;
+        }
+        public bool BetIsValid(IGambler player)
         {
             //TODO rules class should be the validator of bets
             int betToTry = player.MakeBet();
-            bool betIsValid = bank.ValidateBet(player, betToTry);
+            bool betIsValid = ValidateBet(player, betToTry);
 
             if (betIsValid)
             {
@@ -129,8 +136,6 @@ namespace ConsoleGui
         public List<Player> ReturnBankrupt()
         {
             //TODO decide if this method is needed in here? maybe GUI class?
-            /*The List "bankruptPlayers" holds the general Player type, 
-            which means it is able to store both regular players and dealers*/
             List<Player> bankruptPlayers = new List<Player>();
 
             foreach (Player player in players)
@@ -139,7 +144,6 @@ namespace ConsoleGui
                     bankruptPlayers.Add(player);
             }
 
-            //TODO maybe check dealers balance some other way?
             if (isBankrupt(dealer))
                 bankruptPlayers.Add(dealer);
 

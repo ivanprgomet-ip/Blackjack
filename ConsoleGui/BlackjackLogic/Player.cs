@@ -16,7 +16,7 @@ namespace ConsoleGui
         //protected internal: makes _Hand accessible in Blackjack class and for HumanPlayer which is in another assembly
         protected internal Hand _Hand { get; }
         protected string Name { get; }
-        internal int Balance { get; }
+        internal int Balance { get; set; }
 
         public Player(string name)
         {

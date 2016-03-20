@@ -23,7 +23,7 @@ namespace ConsoleGui
     /// </summary>
     class HumanPlayer :Player,IGambler
     {
-        public int Bet { get; private set; }
+        public int Bet { get; set; }
 
         public HumanPlayer(string name):base(name)
         {

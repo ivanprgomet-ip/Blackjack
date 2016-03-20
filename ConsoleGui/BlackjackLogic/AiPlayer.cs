@@ -8,7 +8,7 @@ namespace ConsoleGui
 {
     public class AiPlayer : Player,IGambler
     {
-        public int Bet { get; private set; }
+        public int Bet { get; set; }
 
         public AiPlayer(string name):base(name)
         {
