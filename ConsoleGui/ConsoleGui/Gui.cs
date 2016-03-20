@@ -174,6 +174,7 @@ namespace ConsoleGui
         }
         private void PrintBalance(Player player)
         {
+            //TODO fix so that it also prints bet for RegularPlayers
             Console.Write($"{player.Name}: {player.Balance}$ | ");
         }
         private void PrintBalances()
@@ -232,20 +233,19 @@ namespace ConsoleGui
                 if (currentWinner == Winninghand.Dealer)
                 {
                     game.AddMoney(game.dealer, pBet);//add bet $ to dealer winner
-                    //money does not need to be removed from losing player here
-                    //because it is already done in the betting stage of the round.
+                    game.RemoveMoney(player, pBet);//remove lost $ from loser
                     Console.WriteLine($"{dName} +{pBet}$ | {pName} -{pBet}$");
                 }
                 if (currentWinner == Winninghand.Player)
                 {
-                    game.AddMoney(player, pBet * 2);//add bet*2 $ to player winner
+                    game.AddMoney(player, pBet);//add bet $ to player winner
                     game.RemoveMoney(game.dealer, pBet);//remove lost $ from loser
                     Console.WriteLine($"{dName} -{pBet}$ | {pName} +{pBet}$");
                 }
                 if (currentWinner == Winninghand.Draw)
                 {
-                    game.AddMoney(player, pBet);//player reclaim bet $
-                    Console.WriteLine($"Draw between {dName} and {pName} ({pBet}$ returned)");
+                    //game.AddMoney(player, pBet);//player reclaim bet $
+                    Console.WriteLine($"Draw between {dName} and {pName} (No $ lost for player)");
                 }
                 Console.ResetColor();
             }
