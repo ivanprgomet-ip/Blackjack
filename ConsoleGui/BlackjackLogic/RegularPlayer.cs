@@ -10,5 +10,10 @@ namespace ConsoleGui
     {
         int Bet { get; set; }
         public abstract int MakeBet();
+
+        public RegularPlayer(string name):base(name)
+        {
+
+        }
     }
 }
