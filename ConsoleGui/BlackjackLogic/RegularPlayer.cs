@@ -8,7 +8,7 @@ namespace ConsoleGui
 {
     public abstract class RegularPlayer:Player
     {
-        int Bet { get; set; }
+        public int Bet { get; set; }
         public abstract int MakeBet();
 
         public RegularPlayer(string name):base(name)

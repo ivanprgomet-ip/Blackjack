@@ -18,16 +18,16 @@ namespace ConsoleGui
     public class Blackjack
     {
         public AiDealer dealer = new AiDealer("Dealer");
-        public List<IGambler> players = new List<IGambler>();
+        public List<RegularPlayer> players = new List<RegularPlayer>();
 
         Deck deck;
 
        
-        public void AddPlayer(IGambler player)
+        public void AddPlayer(RegularPlayer player)
         {
             players.Add(player);
         }
-        public void RemovePlayer(IGambler player)
+        public void RemovePlayer(RegularPlayer player)
         {
             //AiDealer not removable with this method
             players.Remove(player);    
@@ -81,14 +81,14 @@ namespace ConsoleGui
             deck = new Deck();
             deck.Shuffle();
         }
-        private bool ValidateBet(IGambler player, int bet)
+        private bool ValidateBet(RegularPlayer player, int bet)
         {
             if (player.Balance < bet)
                 return false;
             else
                 return true;
         }
-        public bool BetIsValid(IGambler player)
+        public bool BetIsValid(RegularPlayer player)
         {
             //TODO rules class should be the validator of bets
             int betToTry = player.MakeBet();
@@ -103,11 +103,15 @@ namespace ConsoleGui
                 return false;
         }
 
+        public void ClearBet(RegularPlayer player)
+        {
+            player.Bet = 0;
+        }
         public void ClearBets()
         {
-            foreach(IGambler player in players)
+            foreach(RegularPlayer player in players)
             {
-                player.Bet = 0;
+                ClearBet(player);
             }
         }
         public string GetHand(Player player)
@@ -138,7 +142,7 @@ namespace ConsoleGui
             //TODO decide if this method is needed in here? maybe GUI class?
             List<Player> bankruptPlayers = new List<Player>();
 
-            foreach (Player player in players)
+            foreach (RegularPlayer player in players)
             {
                 if (isBankrupt(player))
                     bankruptPlayers.Add(player);
@@ -149,16 +153,15 @@ namespace ConsoleGui
 
             return bankruptPlayers;
         }     
-        public Winninghand ReturnWinner(Player player, AiDealer dealer)
+        public Winninghand ReturnWinner(RegularPlayer player, AiDealer dealer)
         {
-            //returns winner: a player OR dealer:
+            //returns winner: a regular player OR dealer:
             Winninghand winner =  Rules.EvaluateWinner(player._Hand, dealer._Hand);
             return winner;
         }
         public bool isBankrupt2()
         {
-            var DealerCash = dealer.Balance;
-            if (DealerCash <= 0)
+            if (dealer.Balance <= 0)
                 return true;
             else
                 return false;
