@@ -10,24 +10,24 @@ namespace ConsoleGui
     class Gui
     {
         private Blackjack game = new Blackjack();
-
+        //TODO fix dealer bankrupcy so when i restart game restarts
+        //TODO fix regular player bankrupcy so when someone goes broke, he leaves
         private bool pActive = true;//true if someone is still active
         private bool GameIsOver;//true if dealer is bankrupt = game is over
         private bool newGame = true;
 
         public void Run()
         {
-            while(newGame)
+            while (newGame)
             {
-            game.NewGame();
-            GameIsOver = false;
+                game.NewGame();
+                GameIsOver = false;
 
                 ////////
-            game.AddPlayer(new HumanPlayer("ivan"));
-            game.AddPlayer(new AiPlayer("james"));
+                game.AddPlayer(new HumanPlayer("ivan"));
+                game.AddPlayer(new AiPlayer("james"));
                 game.AddPlayer(new AiPlayer("dalius"));
-                game.AddPlayer(new HumanPlayer("johan"));
-                InitialMoney(100,100);
+                InitialMoney(5, 100);
                 ////////
 
                 while (!GameIsOver)
@@ -97,7 +97,7 @@ namespace ConsoleGui
         private void RemoveBankruptPlayers()
         {
             List<Player> bankruptPlayers = game.ReturnBankrupt();
-
+            
             foreach (Player player in bankruptPlayers)
             {
                 bankruptPlayers.Remove(player);
@@ -177,8 +177,16 @@ namespace ConsoleGui
         }
         private void PrintBalance(Player player)
         {
-            //TODO fix so that it also prints bet for RegularPlayers
-            Console.Write($"{player.Name}: {player.Balance}$ | ");
+            //var regPlayer2 = player as RegularPlayer;
+
+            if(player is RegularPlayer)
+            {
+                var regPlayer = (RegularPlayer)player;
+                Console.Write($"{regPlayer.Name}: {regPlayer.Balance}$ ({regPlayer.Bet}$) | ");
+
+            }
+            else
+                Console.Write($"{player.Name}: {player.Balance}$ | ");
         }
         private void PrintBalances()
         { 
