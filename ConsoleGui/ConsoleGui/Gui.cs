@@ -16,6 +16,7 @@ namespace ConsoleGui
         private bool GameIsOver;//if dealer is bankrupt, game is over
         private bool newGame = true;
 
+        /////////////////////////////////
         public void Run()
         {
             while (newGame)
@@ -23,11 +24,8 @@ namespace ConsoleGui
                 game.NewGame();
                 GameIsOver = false;
 
-                ////////
-                game.AddPlayer(new HumanPlayer("ivan"));
-                game.AddPlayer(new AiPlayer("james"));
-                InitialMoney(100, 100);
-                ////////
+                PlayerSetup();
+                Console.Clear();
 
                 while (!GameIsOver)
                 {
@@ -68,10 +66,82 @@ namespace ConsoleGui
                 Console.Clear();
             }
         }
+        /////////////////////////////////
         public void PlayerSetup()
         {
-            //todo
+            Console.WriteLine("1/ Just Deal");
+            Console.WriteLine("2/ Setup");
+            string choice = Console.ReadLine();
+
+            switch(choice)
+            {
+                case "1":
+                    game.AddPlayer(new HumanPlayer("Ivan"));
+                    game.AddPlayer(new AiPlayer("Terminator"));
+                    game.AddPlayer(new AiPlayer("Rocky"));
+                    InitialMoney(100, 100);
+                    PrintJoinedPlayers();
+                    Console.ReadKey();
+                    break;
+                case "2":
+                    bool active = true;
+                    game.AddMoney(game.dealer, 100);//if dealer balance is not set, its 100$ by default
+
+                    while(active)
+                    {
+                        Console.WriteLine("1/ Add AiPlayer");
+                        Console.WriteLine("2/ Add HumanPlayer");
+                        Console.WriteLine("3/ Set Dealer startbalance");
+                        Console.WriteLine("4/ Start Game");
+                        string setupChoice = Console.ReadLine();
+
+                        switch (setupChoice)
+                        {
+                            case "1":
+                                Console.WriteLine("Enter name for player >> ");
+                                string aiName = Console.ReadLine();
+                                AiPlayer myNewAi = new AiPlayer(aiName);
+                                Console.WriteLine($"Enter start balance for {aiName}: >> ");
+                                int startBalance = int.Parse(Console.ReadLine());
+                                game.AddMoney(myNewAi, startBalance);
+                                game.AddPlayer(myNewAi);
+                                break;
+                            case "2":
+                                Console.WriteLine("Enter name for player >> ");
+                                string humanName = Console.ReadLine();
+                                HumanPlayer myNewHuman = new HumanPlayer(humanName);
+                                Console.WriteLine($"Enter start balance for {humanName}: >> ");
+                                int startbalance2 = int.Parse(Console.ReadLine());
+                                game.AddMoney(myNewHuman, startbalance2);
+                                game.AddPlayer(myNewHuman);
+                                break;
+                            case "3":
+                                Console.WriteLine("Enter dealer startbalance >> ");
+                                int DealerInitial = int.Parse(Console.ReadLine());
+                                Console.ReadKey();
+                                break;
+                            case "4":
+                                active = false;
+                                Console.Clear();
+                                PrintJoinedPlayers();
+                                Console.ReadKey();
+                                break;
+                            default:
+                                Console.WriteLine("not a valid input");
+                                break;
+                        }
+                    }
+                    break;
+            }
         }
+        private void PrintJoinedPlayers()
+        {
+            foreach(Player player in game.players)
+            {
+                Console.WriteLine($"{player.Name} joined");
+            }
+        }
+
         private void StartNewGame()
         {
             Console.ReadKey();
