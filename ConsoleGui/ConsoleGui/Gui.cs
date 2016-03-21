@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BlackjackLogic;
 
 namespace ConsoleGui
 {
@@ -24,7 +25,9 @@ namespace ConsoleGui
                 ////////
             game.AddPlayer(new HumanPlayer("ivan"));
             game.AddPlayer(new AiPlayer("james"));
-            InitialMoney(100,100);
+                game.AddPlayer(new AiPlayer("dalius"));
+                game.AddPlayer(new HumanPlayer("johan"));
+                InitialMoney(100,100);
                 ////////
 
                 while (!GameIsOver)
