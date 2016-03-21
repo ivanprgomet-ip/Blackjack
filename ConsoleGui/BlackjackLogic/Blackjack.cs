@@ -19,7 +19,7 @@ namespace BlackjackLogic
     public class Blackjack
     {
         public AiDealer dealer = new AiDealer("Dealer");
-        public List<RegularPlayer> players = new List<RegularPlayer>();
+        public List<Player> players = new List<Player>();//TODO must be player to remove bankrupt players properly?
 
         Deck deck;
 
@@ -28,24 +28,23 @@ namespace BlackjackLogic
         {
             players.Add(player);
         }
-        public void RemovePlayer(RegularPlayer player)
-        {
-            //AiDealer not removable with this method
-            players.Remove(player);    
-        }
+
         public void NewGame()
         {
-            List<Player> ToBeCleared = new List<Player>();
+            /*resets the dealer balance to 0$, later dealer 
+            gets + the initial money*/
+            ResetDealerBalance();
 
+            /*Removes all players in list, and later adds 
+            the user specified players that will be in the game*/
+            List<Player> ToBeCleared = new List<Player>();
             foreach (Player player in players)
             {
                 ToBeCleared.Add(player);
             }
-            ToBeCleared.Add(dealer);
-
-            for(int i=0;i<ToBeCleared.Count;i++)
+            foreach (Player player in ToBeCleared)
             {
-                ToBeCleared.Remove(ToBeCleared[i]);
+                players.Remove(player);
             }
         }
         public void FirstDeal()
@@ -70,6 +69,10 @@ namespace BlackjackLogic
         public void AddMoney(Player player,int amount)
         {
             player.Balance += amount;
+        }
+        public void ResetDealerBalance()
+        {
+            dealer.Balance = 0;
         }
         public void RemoveMoney(Player player, int amount)
         {
@@ -142,6 +145,7 @@ namespace BlackjackLogic
         {
             return string.Format($"({Rules.GethandValue(player._Hand)})");
         }
+
         private bool isBankrupt(Player player)
         {
             if (player.Balance==0)
@@ -149,7 +153,15 @@ namespace BlackjackLogic
             else
                 return false;
         }
-        public List<Player> ReturnBankrupt()
+        public bool DealerIsBankrupt()
+        {
+            if (dealer.Balance <= 0)
+                return true;
+            else
+                return false;
+        }
+
+        public List<Player> ReturnBankruptRegPlayers()
         {
             //TODO decide if this method is needed in here? maybe GUI class?
             List<Player> bankruptPlayers = new List<Player>();
@@ -160,8 +172,8 @@ namespace BlackjackLogic
                     bankruptPlayers.Add(player);
             }
 
-            if (isBankrupt(dealer))
-                bankruptPlayers.Add(dealer);
+            //if (isBankrupt(dealer))
+            //    bankruptPlayers.Add(dealer);
 
             return bankruptPlayers;
         }     
@@ -171,12 +183,6 @@ namespace BlackjackLogic
             Winninghand winner =  Rules.EvaluateWinner(player._Hand, dealer._Hand);
             return winner;
         }
-        public bool isBankrupt2()
-        {
-            if (dealer.Balance <= 0)
-                return true;
-            else
-                return false;
-        }
+
     }
 }

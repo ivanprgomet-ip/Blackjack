@@ -13,7 +13,7 @@ namespace ConsoleGui
         //TODO fix dealer bankrupcy so when i restart game restarts
         //TODO fix regular player bankrupcy so when someone goes broke, he leaves
         private bool pActive = true;//true if someone is still active
-        private bool GameIsOver;//true if dealer is bankrupt = game is over
+        private bool GameIsOver;//if dealer is bankrupt, game is over
         private bool newGame = true;
 
         public void Run()
@@ -26,8 +26,7 @@ namespace ConsoleGui
                 ////////
                 game.AddPlayer(new HumanPlayer("ivan"));
                 game.AddPlayer(new AiPlayer("james"));
-                game.AddPlayer(new AiPlayer("dalius"));
-                InitialMoney(5, 100);
+                InitialMoney(10, 10);
                 ////////
 
                 while (!GameIsOver)
@@ -57,7 +56,7 @@ namespace ConsoleGui
                     Console.ReadKey();
                     UpdateWinners();
 
-                    GameIsOver = game.isBankrupt2();
+                    GameIsOver = game.DealerIsBankrupt();
                     if (GameIsOver)
                         break;
 
@@ -75,6 +74,7 @@ namespace ConsoleGui
         }
         private void StartNewGame()
         {
+            Console.ReadKey();
             Console.WriteLine(">>> GAME OVER <<<");
             Console.WriteLine("The house went bankrupt");
             Console.WriteLine("Start New Game? y/n");
@@ -92,15 +92,15 @@ namespace ConsoleGui
             {
                 game.AddMoney(player, playersMoney);
             }
-            game.AddMoney(game.dealer, dealerMoney);
+            
         }
         private void RemoveBankruptPlayers()
         {
-            List<Player> bankruptPlayers = game.ReturnBankrupt();
-            
+            List<Player> bankruptPlayers = game.ReturnBankruptRegPlayers();
+
             foreach (Player player in bankruptPlayers)
             {
-                bankruptPlayers.Remove(player);
+                game.players.Remove(player);
                 Console.WriteLine($"{player.Name} left");
                 Console.ReadKey();
                 Console.Clear();
