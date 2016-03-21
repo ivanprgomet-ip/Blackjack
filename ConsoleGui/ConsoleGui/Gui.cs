@@ -26,7 +26,7 @@ namespace ConsoleGui
                 ////////
                 game.AddPlayer(new HumanPlayer("ivan"));
                 game.AddPlayer(new AiPlayer("james"));
-                InitialMoney(10, 10);
+                InitialMoney(100, 100);
                 ////////
 
                 while (!GameIsOver)
@@ -92,6 +92,7 @@ namespace ConsoleGui
             {
                 game.AddMoney(player, playersMoney);
             }
+            game.AddMoney(game.dealer,dealerMoney);
             
         }
         private void RemoveBankruptPlayers()
