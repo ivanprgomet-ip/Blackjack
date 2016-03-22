@@ -18,7 +18,7 @@ namespace BlackjackLogic
     /// </summary>
     public class Blackjack
     {
-        public AiDealer dealer = new AiDealer("Dealer");
+        public AiDealer dealer = new AiDealer();
         public List<Player> players = new List<Player>();//TODO must be player to remove bankrupt players properly?
 
         Deck deck;
@@ -74,10 +74,6 @@ namespace BlackjackLogic
         {
             dealer.Balance = 0;
         }
-        public void RemoveMoney(Player player, int amount)
-        {
-            player.Balance -= amount;
-        }
 
         public void InitializeDeck()
         {
@@ -106,29 +102,6 @@ namespace BlackjackLogic
                 return false;
         }
 
-        private void ClearHand(Player player)
-        {
-            player._Hand.Clear();
-        }
-        public void ClearHands()
-        {
-            foreach (RegularPlayer player in players)
-            {
-                player._Hand.Clear();
-            }
-            dealer._Hand.Clear();
-        }
-        private void ClearBet(RegularPlayer player)
-        {
-            player.Bet = 0;
-        }
-        public void ClearBets()
-        {
-            foreach(RegularPlayer player in players)
-            {
-                ClearBet(player);
-            }
-        }
         public string GetHand(Player player)
         {
             //TODO decide where to have this method (in Hand?)

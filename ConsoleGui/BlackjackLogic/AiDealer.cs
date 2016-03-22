@@ -9,7 +9,7 @@ namespace BlackjackLogic
 {
     public class AiDealer : Player
     {
-        public AiDealer(string name):base(name="Dealer")
+        public AiDealer():base("Dealer")
         {
             //TODO: see if code above is legit
         }

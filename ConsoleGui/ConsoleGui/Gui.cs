@@ -182,10 +182,21 @@ namespace ConsoleGui
             pActive = true;//resetting general player active variable
             RemoveBankruptPlayers();//extract and remove bankrupt players before every round
 
-            game.ClearBets();
-            game.ClearHands();
-            
-            game.InitializeDeck();//52cards refreshed and shuffled
+            //clearing bets
+            foreach (RegularPlayer player in game.players)
+            {
+                player.Bet = 0;
+            }
+
+            //clearing hands
+            foreach (RegularPlayer player in game.players)
+            {
+                player._Hand.Clear();
+            }
+            game.dealer._Hand.Clear();
+
+            //initializing and shuffling deck
+            game.InitializeDeck();
         }
 
         private string ValidateBet(RegularPlayer player)
@@ -270,6 +281,37 @@ namespace ConsoleGui
             Console.WriteLine();
             Console.ResetColor();
         }
+        private void UpdateWinners()
+        {
+            //all regular players evaluated against dealer
+            foreach(RegularPlayer player in game.players)
+            {
+                int pBet = player.Bet;
+                string pName = player.Name;
+                string dName = game.dealer.Name;
+                Winninghand currentWinner = game.ReturnWinner(player, game.dealer);
+                Console.ForegroundColor = ConsoleColor.Yellow;
+
+                if (currentWinner == Winninghand.Dealer)
+                {
+                    game.AddMoney(game.dealer, pBet);//add bet $ to dealer winner
+                    player.Balance -= pBet;//remove lost $ from loser
+                    Console.WriteLine($"{dName} +{pBet}$ | {pName} -{pBet}$");
+                }
+                if (currentWinner == Winninghand.Player)
+                {
+                    game.AddMoney(player, pBet);//add bet $ to player winner
+                    game.dealer.Balance -= pBet;//remove lost $ from loser
+                    Console.WriteLine($"{dName} -{pBet}$ | {pName} +{pBet}$");
+                }
+                if (currentWinner == Winninghand.Draw)
+                {
+                    Console.WriteLine($"Draw between {dName} and {pName} (No $ lost for player)");
+                }
+                Console.ResetColor();
+            }
+        }
+
         private void HitOrStay(Player player)
         {
             bool bustOrStay = false;
@@ -292,7 +334,7 @@ namespace ConsoleGui
                 }
             }
         }
-        public bool PlayersHitOrStay()
+        private bool PlayersHitOrStay()
         {
             foreach(RegularPlayer player in game.players)
             {
@@ -300,37 +342,6 @@ namespace ConsoleGui
             }
             HitOrStay(game.dealer);
             return false;//returns false to say there is no more active players
-        }
-        private void UpdateWinners()
-        {
-            //all regular players evaluated against dealer
-            foreach(RegularPlayer player in game.players)
-            {
-                int pBet = player.Bet;
-                string pName = player.Name;
-                string dName = game.dealer.Name;
-                Winninghand currentWinner = game.ReturnWinner(player, game.dealer);
-                Console.ForegroundColor = ConsoleColor.Yellow;
-
-                if (currentWinner == Winninghand.Dealer)
-                {
-                    game.AddMoney(game.dealer, pBet);//add bet $ to dealer winner
-                    game.RemoveMoney(player, pBet);//remove lost $ from loser
-                    Console.WriteLine($"{dName} +{pBet}$ | {pName} -{pBet}$");
-                }
-                if (currentWinner == Winninghand.Player)
-                {
-                    game.AddMoney(player, pBet);//add bet $ to player winner
-                    game.RemoveMoney(game.dealer, pBet);//remove lost $ from loser
-                    Console.WriteLine($"{dName} -{pBet}$ | {pName} +{pBet}$");
-                }
-                if (currentWinner == Winninghand.Draw)
-                {
-                    //game.AddMoney(player, pBet);//player reclaim bet $
-                    Console.WriteLine($"Draw between {dName} and {pName} (No $ lost for player)");
-                }
-                Console.ResetColor();
-            }
         }
     }
 }
