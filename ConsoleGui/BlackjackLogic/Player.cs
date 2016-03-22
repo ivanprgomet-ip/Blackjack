@@ -15,18 +15,18 @@ namespace BlackjackLogic
     public abstract class Player
     {
         //protected internal: makes _Hand accessible in Blackjack class and for HumanPlayer which is in another assembly
-        public Hand _Hand { get; }
+        public Hand Hand { get; }
         public string Name { get; }
         public int Balance { get; set; }
 
         public Player(string name)
         {
             Name = name;
-            _Hand = new Hand();
+            Hand = new Hand();
         }
         public Player()
         {
-            _Hand = new Hand();
+            Hand = new Hand();
         }
 
         public abstract PlayerDecision MakeDecision();

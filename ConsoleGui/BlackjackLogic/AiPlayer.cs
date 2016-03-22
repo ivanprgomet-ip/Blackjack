@@ -16,7 +16,7 @@ namespace BlackjackLogic
 
         public override PlayerDecision MakeDecision()
         {
-            var handValue = Rules.GethandValue(_Hand);
+            var handValue = Rules.GethandValue(Hand);
 
             if (Bet > 7)
             {

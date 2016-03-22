@@ -191,9 +191,9 @@ namespace ConsoleGui
             //clearing hands
             foreach (RegularPlayer player in game.players)
             {
-                player._Hand.Clear();
+                player.Hand.Clear();
             }
-            game.dealer._Hand.Clear();
+            game.dealer.Hand.Clear();
 
             //initializing and shuffling deck
             game.InitializeDeck();
@@ -239,7 +239,7 @@ namespace ConsoleGui
 
         private string ReturnIfBust(Player player)
         {
-            return Rules.isBust(player._Hand) ? "BUST" : "";
+            return Rules.isBust(player.Hand) ? "BUST" : "";
         }
         private string ReturnHand(Player player)
         {
@@ -317,7 +317,7 @@ namespace ConsoleGui
             bool bustOrStay = false;
             while (!bustOrStay)
             {
-                if (Rules.GethandValue(player._Hand) > 21)
+                if (Rules.GethandValue(player.Hand) > 21)
                     bustOrStay = true;
                 else
                 {

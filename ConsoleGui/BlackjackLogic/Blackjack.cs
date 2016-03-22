@@ -60,7 +60,7 @@ namespace BlackjackLogic
         }
         public void DealCardTo(Player player)
         {
-            player._Hand.AddCard(deck.ReturnCard());
+            player.Hand.AddCard(deck.ReturnCard());
         }
         public PlayerDecision ReturnDecision(Player player)
         {
@@ -106,7 +106,7 @@ namespace BlackjackLogic
         {
             //TODO decide where to have this method (in Hand?)
             string pHand = string.Empty;
-            foreach (Card c in player._Hand.Cards)
+            foreach (Card c in player.Hand.Cards)
             {
                 pHand += c.ToString() + " ";
             }
@@ -116,7 +116,7 @@ namespace BlackjackLogic
         }
         private string GetHandValue(Player player)
         {
-            return string.Format($"({Rules.GethandValue(player._Hand)})");
+            return string.Format($"({Rules.GethandValue(player.Hand)})");
         }
 
         private bool isBankrupt(Player player)
@@ -149,7 +149,7 @@ namespace BlackjackLogic
         public Winninghand ReturnWinner(RegularPlayer player, AiDealer dealer)
         {
             //returns winner: a regular player OR dealer:
-            Winninghand winner =  Rules.EvaluateWinner(player._Hand, dealer._Hand);
+            Winninghand winner =  Rules.EvaluateWinner(player.Hand, dealer.Hand);
             return winner;
         }
 

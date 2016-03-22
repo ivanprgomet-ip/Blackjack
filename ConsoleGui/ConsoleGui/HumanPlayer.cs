@@ -16,7 +16,7 @@ namespace ConsoleGui
 
         public override PlayerDecision MakeDecision()
         {
-            if (Rules.GethandValue(_Hand) >= 21)
+            if (Rules.GethandValue(Hand) >= 21)
                 return PlayerDecision.Stay;
             
             Console.Write($"{Name}: hit/stay (h/s)? >> ");

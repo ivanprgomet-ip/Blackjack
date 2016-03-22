@@ -16,7 +16,7 @@ namespace BlackjackLogic
 
         public override PlayerDecision MakeDecision()
         {
-            if(Rules.GethandValue(_Hand) >= 17)
+            if(Rules.GethandValue(Hand) >= 17)
                 return PlayerDecision.Stay;
             return PlayerDecision.Hit;
         }
