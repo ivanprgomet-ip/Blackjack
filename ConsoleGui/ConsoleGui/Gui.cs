@@ -167,7 +167,7 @@ namespace ConsoleGui
         }
         private void RemoveBankruptPlayers()
         {
-            List<Player> bankruptPlayers = game.ReturnBankruptRegPlayers();
+            List<RegularPlayer> bankruptPlayers = game.ReturnBankruptPlayers();
 
             foreach (RegularPlayer player in bankruptPlayers)
             {
