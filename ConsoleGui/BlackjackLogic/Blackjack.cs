@@ -146,7 +146,7 @@ namespace BlackjackLogic
             }
             return bankruptPlayers;
         }     
-        public Winninghand ReturnWinner(RegularPlayer player, AiDealer dealer)
+        public Winninghand ReturnWinner(RegularPlayer player)
         {
             //returns winner: a regular player OR dealer:
             Winninghand winner =  Rules.EvaluateWinner(player.Hand, dealer.Hand);

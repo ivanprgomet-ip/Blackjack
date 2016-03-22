@@ -10,8 +10,6 @@ namespace ConsoleGui
     class Gui
     {
         private Blackjack game = new Blackjack();
-        //TODO fix dealer bankrupcy so when i restart game restarts
-        //TODO fix regular player bankrupcy so when someone goes broke, he leaves
         private bool pActive = true;//true if someone is still active
         private bool GameIsOver;//if dealer is bankrupt, game is over
         private bool newGame = true;
@@ -289,7 +287,7 @@ namespace ConsoleGui
                 int pBet = player.Bet;
                 string pName = player.Name;
                 string dName = game.dealer.Name;
-                Winninghand currentWinner = game.ReturnWinner(player, game.dealer);
+                Winninghand currentWinner = game.ReturnWinner(player);
                 Console.ForegroundColor = ConsoleColor.Yellow;
 
                 if (currentWinner == Winninghand.Dealer)

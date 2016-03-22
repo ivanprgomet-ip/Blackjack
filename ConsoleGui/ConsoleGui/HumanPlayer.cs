@@ -20,8 +20,7 @@ namespace ConsoleGui
                 return PlayerDecision.Stay;
             
             Console.Write($"{Name}: hit/stay (h/s)? >> ");
-            var choice = Console.ReadLine();
-            return choice == "h" ? PlayerDecision.Hit : PlayerDecision.Stay;
+            return Console.ReadLine() == "h" ? PlayerDecision.Hit : PlayerDecision.Stay;
         }
         public override int MakeBet()
         {
