@@ -169,7 +169,7 @@ namespace ConsoleGui
         {
             List<Player> bankruptPlayers = game.ReturnBankruptRegPlayers();
 
-            foreach (Player player in bankruptPlayers)
+            foreach (RegularPlayer player in bankruptPlayers)
             {
                 game.players.Remove(player);
                 Console.WriteLine($"{player.Name} left");

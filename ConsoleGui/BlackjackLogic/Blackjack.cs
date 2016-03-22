@@ -19,7 +19,7 @@ namespace BlackjackLogic
     public class Blackjack
     {
         public AiDealer dealer = new AiDealer();
-        public List<Player> players = new List<Player>();//TODO must be player to remove bankrupt players properly?
+        public List<RegularPlayer> players = new List<RegularPlayer>();//TODO must be player to remove bankrupt players properly?
 
         Deck deck;
 
@@ -42,7 +42,7 @@ namespace BlackjackLogic
             {
                 ToBeCleared.Add(player);
             }
-            foreach (Player player in ToBeCleared)
+            foreach (RegularPlayer player in ToBeCleared)
             {
                 players.Remove(player);
             }
@@ -144,10 +144,6 @@ namespace BlackjackLogic
                 if (isBankrupt(player))
                     bankruptPlayers.Add(player);
             }
-
-            //if (isBankrupt(dealer))
-            //    bankruptPlayers.Add(dealer);
-
             return bankruptPlayers;
         }     
         public Winninghand ReturnWinner(RegularPlayer player, AiDealer dealer)
