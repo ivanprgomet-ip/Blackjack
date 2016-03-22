@@ -226,11 +226,11 @@ namespace ConsoleGui
             Console.WriteLine();
         }
 
-        private string RtrnIfBust(Player player)
+        private string ReturnIfBust(Player player)
         {
             return Rules.isBust(player._Hand) ? "BUST" : "";
         }
-        private string RtrnHand(Player player)
+        private string ReturnHand(Player player)
         {
             return string.Format(($"{player.Name}: {game.GetHand(player)}"));
         }
@@ -239,10 +239,10 @@ namespace ConsoleGui
             Console.ForegroundColor = ConsoleColor.Cyan;
             foreach(RegularPlayer player in game.players)
             {
-                Console.Write(RtrnHand(player)+" "+RtrnIfBust(player));
+                Console.Write(ReturnHand(player)+" "+ReturnIfBust(player));
                 Console.WriteLine();
             }
-            Console.Write(RtrnHand(game.dealer) + " " + RtrnIfBust(game.dealer));
+            Console.Write(ReturnHand(game.dealer) + " " + ReturnIfBust(game.dealer));
             Console.WriteLine();
             Console.ResetColor();
         }
