@@ -165,9 +165,9 @@ namespace ConsoleGui
             game.AddMoney(game.dealer,dealerMoney);
             
         }
-        private void RemoveBankruptPlayers()
+        private void RemoveBankrupt()
         {
-            List<RegularPlayer> bankruptPlayers = game.ReturnBankruptPlayers();
+            List<RegularPlayer> bankruptPlayers = game.ReturnBankrupt();
 
             foreach (RegularPlayer player in bankruptPlayers)
             {
@@ -180,7 +180,7 @@ namespace ConsoleGui
         private void NewRound()
         {
             pActive = true;//resetting general player active variable
-            RemoveBankruptPlayers();//extract and remove bankrupt players before every round
+            RemoveBankrupt();//extract and remove bankrupt players before every round
 
             //clearing bets
             foreach (RegularPlayer player in game.players)

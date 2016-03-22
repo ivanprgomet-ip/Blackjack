@@ -134,7 +134,7 @@ namespace BlackjackLogic
                 return false;
         }
 
-        public List<RegularPlayer> ReturnBankruptPlayers()
+        public List<RegularPlayer> ReturnBankrupt()
         {
             //TODO decide if this method is needed in here? maybe GUI class?
             List<RegularPlayer> bankruptPlayers = new List<RegularPlayer>();

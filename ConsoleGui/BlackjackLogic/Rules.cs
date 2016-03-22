@@ -18,8 +18,7 @@ namespace BlackjackLogic
     {
         public static bool isBust(Hand pHand)
         {
-            int handValue = GethandValue(pHand);
-            return handValue > 21 ? true : false;
+            return GethandValue(pHand) > 21 ? true : false;
         }
         public static Winninghand EvaluateWinner(Hand player, Hand dealer)
         {
@@ -27,29 +26,15 @@ namespace BlackjackLogic
             int pHandValue = GethandValue(player);
 
             if (pHandValue>21)
-            {
-                if (dHandValue > 21)
-                    return Winninghand.Draw;
-                else
-                    return Winninghand.Dealer;
-            }
+                return dHandValue > 21 ? Winninghand.Draw : Winninghand.Dealer;
             else if (dHandValue > 21)
-            {
-                if (pHandValue > 21)
-                    return Winninghand.Draw;
-                else
-                    return Winninghand.Player;
-            }
+                return pHandValue > 21 ? Winninghand.Draw : Winninghand.Player;
             else
             {
                 if (dHandValue == pHandValue)
-                {
                     return Winninghand.Draw;
-                }
                 else
-                {
                     return pHandValue > dHandValue ? Winninghand.Player : Winninghand.Dealer;
-                }
             }
         }
         public static int GethandValue(Hand hand)
