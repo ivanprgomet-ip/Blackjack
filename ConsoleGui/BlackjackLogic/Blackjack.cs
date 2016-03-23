@@ -19,7 +19,7 @@ namespace BlackjackLogic
     public class Blackjack
     {
         public AiDealer dealer = new AiDealer();
-        public List<RegularPlayer> players = new List<RegularPlayer>();//TODO must be player to remove bankrupt players properly?
+        public List<RegularPlayer> players = new List<RegularPlayer>();
 
         Deck deck;
 

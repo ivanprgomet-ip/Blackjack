@@ -30,7 +30,7 @@ namespace ConsoleGui
                     NewRound();
                     PrintBalances();
 
-                    MakeBets();
+                    ProcessBets();
                     PrintBets();
 
                     Console.WriteLine(">> press any button to deal cards <<");
@@ -43,7 +43,7 @@ namespace ConsoleGui
 
                     while (pActive)
                     {
-                        pActive = PlayersHitOrStay();
+                        pActive = ProcessDecisions();
                         if (!pActive)
                             break;
                     }
@@ -197,7 +197,7 @@ namespace ConsoleGui
             game.InitializeDeck();
         }
 
-        private string ValidateBet(RegularPlayer player)
+        private string MakeBet(RegularPlayer player)
         {
             var betIsValid = game.BetIsValid(player);
             var pName = player.Name;
@@ -214,14 +214,15 @@ namespace ConsoleGui
             }
             return ($"{pName} bet {player.Bet}$");
         }
-        private void MakeBets()
+        private void ProcessBets()
         {
             foreach (RegularPlayer player in game.players)
             {
-                ValidateBet(player);
+                MakeBet(player);
             }
             Console.WriteLine();
         }
+
         private void PrintBet(RegularPlayer player)
         {
             Console.WriteLine($"{player.Name} bet {player.Bet}$");
@@ -310,7 +311,7 @@ namespace ConsoleGui
             }
         }
 
-        private void HitOrStay(Player player)
+        private void MakeDecision(Player player)
         {
             bool bustOrStay = false;
             while (!bustOrStay)
@@ -332,13 +333,13 @@ namespace ConsoleGui
                 }
             }
         }
-        private bool PlayersHitOrStay()
+        private bool ProcessDecisions()
         {
             foreach(RegularPlayer player in game.players)
             {
-                HitOrStay(player);
+                MakeDecision(player);
             }
-            HitOrStay(game.dealer);
+            MakeDecision(game.dealer);
             return false;//returns false to say there is no more active players
         }
     }
