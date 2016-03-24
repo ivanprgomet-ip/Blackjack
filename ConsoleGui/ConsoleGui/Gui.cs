@@ -145,7 +145,7 @@ namespace ConsoleGui
             Console.ReadKey();
             Console.WriteLine(">>> GAME OVER <<<");
             Console.WriteLine("The house went bankrupt");
-            Console.WriteLine("Start New Game? y/n");
+            Console.WriteLine("Revert back to main Menu? y/n");
             string decision = Console.ReadLine().ToLower();
 
             if (decision.ToLower() == "y")
