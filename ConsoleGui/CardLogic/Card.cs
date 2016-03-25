@@ -10,7 +10,7 @@ namespace CardLogic
     {
         public string Suite { get; }
         public int Value { get; }
-        public bool IsHidden { get; private set; }
+        public bool IsHidden { get; set; }
         public Card(string suite, int value)
         {
             Suite = suite;
@@ -23,16 +23,21 @@ namespace CardLogic
         }
         public override string ToString()
         {
-            if (Value == 1)
-                return "A" + Suite;
-            if (Value == 11)
-                return "J" + Suite;
-            if (Value == 12)
-                return "Q" + Suite;
-            if (Value == 13)
-                return "K" + Suite;
+            if (IsHidden)
+                return "[]";
             else
-                return Value + Suite;
+            {
+                if (Value == 1)
+                    return "A" + Suite;
+                if (Value == 11)
+                    return "J" + Suite;
+                if (Value == 12)
+                    return "Q" + Suite;
+                if (Value == 13)
+                    return "K" + Suite;
+                else
+                    return Value + Suite;
+            }
         }
     }
 }

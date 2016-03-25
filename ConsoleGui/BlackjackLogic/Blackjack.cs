@@ -102,22 +102,34 @@ namespace BlackjackLogic
                 return false;
         }
 
-        public string GetHand(Player player)
-        {
-            //TODO decide where to have this method (in Hand?)
-            string pHand = string.Empty;
-            foreach (Card c in player.Hand.Cards)
-            {
-                pHand += c.ToString() + " ";
-            }
-            //also adds the players current total score next to handvalue
-            pHand += GetHandValue(player);
-            return pHand;
-        }
-        private string GetHandValue(Player player)
-        {
-            return string.Format($"({Rules.GethandValue(player.Hand)})");
-        }
+        //public string GetHand(Player player)
+        //{
+        //    //TODO decide where to have this method (in Hand?)
+        //    int dealerCount = 0;
+        //    string pHand = string.Empty;
+        //    foreach (Card c in player.Hand.Cards)
+        //    {
+        //        if(player is AiDealer)
+        //        {
+        //            dealerCount++;
+        //            if(dealerCount==2)
+        //            {
+        //                c.IsHidden = true;
+        //            }
+        //        }
+        //        pHand += c.ToString() + " ";
+        //    }
+        //    //also adds the players current total score next to handvalue
+        //    if (player is AiDealer)
+        //        pHand += "(?)";
+        //    else
+        //        pHand += GetHandValue(player);
+        //    return pHand;
+        //}
+        //private string GetHandValue(Player player)
+        //{
+        //    return string.Format($"({Rules.GethandValue(player.Hand)})");
+        //}
 
         private bool isBankrupt(Player player)
         {

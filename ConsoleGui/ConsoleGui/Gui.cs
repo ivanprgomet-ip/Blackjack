@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BlackjackLogic;
+using CardLogic;
 
 namespace ConsoleGui
 {
@@ -50,6 +51,9 @@ namespace ConsoleGui
 
                     Console.WriteLine(">> press any button for results <<");
                     Console.ReadKey();
+                    Console.Clear();////////////////
+                    PrintBalances();///////////////
+                    PrintHandsLast();////////////////
                     UpdateWinners();
 
                     GameIsOver = game.DealerIsBankrupt();
@@ -116,6 +120,8 @@ namespace ConsoleGui
                             case "3":
                                 Console.WriteLine("Enter dealer startbalance >> ");
                                 int DealerInitial = int.Parse(Console.ReadLine());
+                                game.dealer.Balance = 0;
+                                game.AddMoney(game.dealer, DealerInitial);
                                 Console.ReadKey();
                                 break;
                             case "4":
@@ -240,22 +246,74 @@ namespace ConsoleGui
         {
             return Rules.isBust(player.Hand) ? "BUST" : "";
         }
-        private string ReturnHand(Player player)
-        {
-            return string.Format(($"{player.Name}: {game.GetHand(player)}"));
-        }
+
+        //private string ReturnHand(Player player)
+        //{
+        //    return string.Format(($"{player.Name}: {game.GetHand(player)}"));
+        //}
+        //private void PrintHands()
+        //{
+        //    Console.ForegroundColor = ConsoleColor.Cyan;
+        //    foreach(RegularPlayer player in game.players)
+        //    {
+        //        Console.Write(ReturnHand(player)+" "+ReturnIfBust(player));
+        //        Console.WriteLine();
+        //    }
+        //    Console.Write(ReturnHand(game.dealer) + " " + ReturnIfBust(game.dealer));
+        //    Console.WriteLine();
+        //    Console.ResetColor();
+        //}
+
         private void PrintHands()
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
-            foreach(RegularPlayer player in game.players)
+            foreach (RegularPlayer player in game.players)
             {
-                Console.Write(ReturnHand(player)+" "+ReturnIfBust(player));
+                Console.Write(player.Name + ": ");
+                foreach(Card c in player.Hand.Cards)
+                {
+                    Console.Write(c.ToString() + " ");
+                }
+                Console.Write($"({Rules.GethandValue(player.Hand)}) {ReturnIfBust(player)}");
                 Console.WriteLine();
             }
-            Console.Write(ReturnHand(game.dealer) + " " + ReturnIfBust(game.dealer));
+
+            int dealerCount = 0;
+            Console.Write(game.dealer.Name + " ");
+            foreach(Card c in game.dealer.Hand.Cards)
+            {
+                dealerCount++;
+                if (dealerCount == 2)
+                    c.IsHidden = true;
+                Console.Write(c.ToString() + " ");
+            }
             Console.WriteLine();
             Console.ResetColor();
         }
+        private void PrintHandsLast()
+        {
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            foreach (RegularPlayer player in game.players)
+            {
+                Console.Write(player.Name + ": ");
+                foreach (Card c in player.Hand.Cards)
+                {
+                    Console.Write(c.ToString() + " ");
+                }
+                Console.Write($"({Rules.GethandValue(player.Hand)}) {ReturnIfBust(player)}");
+                Console.WriteLine();
+            }
+            Console.Write(game.dealer.Name + " ");
+            foreach (Card c in game.dealer.Hand.Cards)
+            {
+                c.IsHidden = false;
+                Console.Write(c.ToString() + " ");
+            }
+            Console.Write($"({Rules.GethandValue(game.dealer.Hand)}) {ReturnIfBust(game.dealer)}");
+            Console.WriteLine();
+            Console.ResetColor();
+        }
+
         private void PrintBalance(Player player)
         {
             //var regPlayer2 = player as RegularPlayer;
