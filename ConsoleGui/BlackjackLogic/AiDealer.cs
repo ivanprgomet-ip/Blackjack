@@ -9,10 +9,7 @@ namespace BlackjackLogic
 {
     public class AiDealer : Player
     {
-        public AiDealer():base("Dealer")
-        {
-            //TODO: see if code above is legit
-        }
+        public AiDealer():base("Dealer"){}
 
         public override PlayerDecision MakeDecision()
         {

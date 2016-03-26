@@ -74,7 +74,6 @@ namespace BlackjackLogic
         {
             dealer.Balance = 0;
         }
-
         public void InitializeDeck()
         {
             deck = new Deck();
@@ -101,36 +100,6 @@ namespace BlackjackLogic
             else
                 return false;
         }
-
-        //public string GetHand(Player player)
-        //{
-        //    //TODO decide where to have this method (in Hand?)
-        //    int dealerCount = 0;
-        //    string pHand = string.Empty;
-        //    foreach (Card c in player.Hand.Cards)
-        //    {
-        //        if(player is AiDealer)
-        //        {
-        //            dealerCount++;
-        //            if(dealerCount==2)
-        //            {
-        //                c.IsHidden = true;
-        //            }
-        //        }
-        //        pHand += c.ToString() + " ";
-        //    }
-        //    //also adds the players current total score next to handvalue
-        //    if (player is AiDealer)
-        //        pHand += "(?)";
-        //    else
-        //        pHand += GetHandValue(player);
-        //    return pHand;
-        //}
-        //private string GetHandValue(Player player)
-        //{
-        //    return string.Format($"({Rules.GethandValue(player.Hand)})");
-        //}
-
         private bool isBankrupt(Player player)
         {
             if (player.Balance==0)
@@ -145,7 +114,6 @@ namespace BlackjackLogic
             else
                 return false;
         }
-
         public List<RegularPlayer> ReturnBankrupt()
         {
             //TODO decide if this method is needed in here? maybe GUI class?

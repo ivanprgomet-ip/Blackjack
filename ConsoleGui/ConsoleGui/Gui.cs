@@ -145,7 +145,6 @@ namespace ConsoleGui
                 Console.WriteLine($"{player.Name} joined");
             }
         }
-
         private void StartNewGame()
         {
             Console.ReadKey();
@@ -159,7 +158,6 @@ namespace ConsoleGui
             else
                 newGame = false;
         }
-
         private void InitialMoney(int playersMoney,int dealerMoney)
         {
             foreach (RegularPlayer player in game.players)
@@ -202,7 +200,6 @@ namespace ConsoleGui
             //initializing and shuffling deck
             game.InitializeDeck();
         }
-
         private string MakeBet(RegularPlayer player)
         {
             var betIsValid = game.BetIsValid(player);
@@ -228,7 +225,6 @@ namespace ConsoleGui
             }
             Console.WriteLine();
         }
-
         private void PrintBet(RegularPlayer player)
         {
             Console.WriteLine($"{player.Name} bet {player.Bet}$");
@@ -241,29 +237,10 @@ namespace ConsoleGui
             }
             Console.WriteLine();
         }
-
         private string ReturnIfBust(Player player)
         {
             return Rules.isBust(player.Hand) ? "BUST" : "";
         }
-
-        //private string ReturnHand(Player player)
-        //{
-        //    return string.Format(($"{player.Name}: {game.GetHand(player)}"));
-        //}
-        //private void PrintHands()
-        //{
-        //    Console.ForegroundColor = ConsoleColor.Cyan;
-        //    foreach(RegularPlayer player in game.players)
-        //    {
-        //        Console.Write(ReturnHand(player)+" "+ReturnIfBust(player));
-        //        Console.WriteLine();
-        //    }
-        //    Console.Write(ReturnHand(game.dealer) + " " + ReturnIfBust(game.dealer));
-        //    Console.WriteLine();
-        //    Console.ResetColor();
-        //}
-
         private void PrintHands()
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
@@ -313,7 +290,6 @@ namespace ConsoleGui
             Console.WriteLine();
             Console.ResetColor();
         }
-
         private void PrintBalance(Player player)
         {
             //var regPlayer2 = player as RegularPlayer;
@@ -368,7 +344,6 @@ namespace ConsoleGui
                 Console.ResetColor();
             }
         }
-
         private void MakeDecision(Player player)
         {
             bool bustOrStay = false;
