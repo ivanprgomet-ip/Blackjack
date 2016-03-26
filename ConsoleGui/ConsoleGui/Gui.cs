@@ -100,35 +100,37 @@ namespace ConsoleGui
                         switch (setupChoice)
                         {
                             case "1":
-                                Console.WriteLine("Enter name for player >> ");
+                                Console.Write("Enter name for ai player >> ");
                                 string aiName = Console.ReadLine();
                                 AiPlayer myNewAi = new AiPlayer(aiName);
-                                Console.WriteLine($"Enter start balance for {aiName}: >> ");
+                                Console.Write($"Enter start balance for {aiName}: >> ");
                                 int startBalance = int.Parse(Console.ReadLine());
                                 game.AddMoney(myNewAi, startBalance);
                                 game.AddPlayer(myNewAi);
+                                Console.Clear();
                                 break;
                             case "2":
-                                Console.WriteLine("Enter name for player >> ");
+                                Console.Write("Enter name for human player >> ");
                                 string humanName = Console.ReadLine();
                                 HumanPlayer myNewHuman = new HumanPlayer(humanName);
-                                Console.WriteLine($"Enter start balance for {humanName}: >> ");
+                                Console.Write($"Enter start balance for {humanName}: >> ");
                                 int startbalance2 = int.Parse(Console.ReadLine());
                                 game.AddMoney(myNewHuman, startbalance2);
                                 game.AddPlayer(myNewHuman);
+                                Console.Clear();
                                 break;
                             case "3":
-                                Console.WriteLine("Enter dealer startbalance >> ");
+                                Console.Write("Enter dealer startbalance >> ");
                                 int DealerInitial = int.Parse(Console.ReadLine());
                                 game.dealer.Balance = 0;
                                 game.AddMoney(game.dealer, DealerInitial);
                                 Console.ReadKey();
+                                Console.Clear();
                                 break;
                             case "4":
                                 active = false;
                                 Console.Clear();
                                 PrintJoinedPlayers();
-                                Console.ReadKey();
                                 break;
                             default:
                                 Console.WriteLine("not a valid input");
