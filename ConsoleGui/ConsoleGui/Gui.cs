@@ -24,7 +24,7 @@ namespace ConsoleGui
                 GameIsOver = false;
 
                 PlayerSetup();
-                Console.Clear();
+                //Console.Clear();
 
                 while (!GameIsOver)
                 {
@@ -84,6 +84,7 @@ namespace ConsoleGui
                     InitialMoney(100, 100);
                     PrintJoinedPlayers();
                     Console.ReadKey();
+                    Console.Clear();
                     break;
                 case "2":
                     bool active = true;
@@ -124,13 +125,13 @@ namespace ConsoleGui
                                 int DealerInitial = int.Parse(Console.ReadLine());
                                 game.dealer.Balance = 0;
                                 game.AddMoney(game.dealer, DealerInitial);
-                                Console.ReadKey();
                                 Console.Clear();
                                 break;
                             case "4":
                                 active = false;
-                                Console.Clear();
                                 PrintJoinedPlayers();
+                                Console.ReadKey();
+                                Console.Clear();
                                 break;
                             default:
                                 Console.WriteLine("not a valid input");
@@ -308,6 +309,7 @@ namespace ConsoleGui
         private void PrintBalances()
         { 
             Console.BackgroundColor = ConsoleColor.DarkGreen;
+            Console.ForegroundColor = ConsoleColor.Black;
             foreach (RegularPlayer player in game.players)
             {
                 PrintBalance(player);
